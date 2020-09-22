@@ -1,14 +1,18 @@
 ---
-title: "R Notebook"
-output: html_notebook
-editor_options: 
-  chunk_output_type: inline
+title: "High School Participation in Athletics"
+author: "Mason Kellett, Carmen Canedo, Joseph Bernardi, David Leshchiner"
+output:
+  pdf_document: default
+  word_document: default
+  html_notebook: default
 ---
 
 
 ```{r Load, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
 library(reshape2)
+library(RColorBrewer)
+library(wesanderson)
 df = read.csv("Sports Data - MajorSports.csv")
 df$Boys = as.numeric(df$Boys)
 df$Girls = as.numeric(df$Girls)
@@ -20,6 +24,8 @@ df.year = df %>%
   ungroup()
 df.year.melt = melt(df.year)
 
+df.year.melt$Year = as.Date(as.character(df.year.melt$Year),"%Y")
+df.year.melt$Year = lubridate::year(df.year.melt$Year)
 df.year.melt = df.year.melt %>%
   group_by(variable) %>% 
   arrange(Year, .by_group = TRUE) %>%
@@ -52,35 +58,63 @@ df.SB = df.SB %>%
   arrange(Year, .by_group = TRUE) %>%
   mutate(pct_change = (Viewers/lag(Viewers) - 1) * 100) %>%
   filter(Year %in% df$Year)
+
+
 ```
 
-#1. Project Description  
+# 1. Project Description  
 
-Sports play a massive role in American Culture. However, over the past two years there has been a 2% decresase in both male and female athletes who participate in althetics at the high school level. This reasearch will explore hypotheses as to why invovlement with sports has decreseased by analyzing participation in the four major US sports; football, baseball, soccer and basketball. 
+Sports play a massive role in American Culture. However, over the past two years there has been a 2% decrease in both male and female athletes who participate in athletics at the high school level. This research will explore hypotheses as to why involvement with sports has decreased by analyzing participation in the four major US sports; football, baseball, soccer and basketball. 
 
-```{r Graph 1, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Graph 1, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4,fig.width=10,fig.align= 'center'}
+
 ggplot(df.year.melt) + 
-  geom_line(aes(x=Year,y=pct_change,color = variable))
+  geom_line(aes(x=Year,y=pct_change,color = variable),size = 2) +
+  geom_hline(yintercept = 0,linetype = "dashed",color = "red")+
+  xlim(2010,2018)+
+  labs(title = "Percent Change of High School Athletes",
+       y = "% Change",
+       caption = "Data provided by NFHS") +
+  theme_minimal() +
+  scale_color_manual(values = wes_palette(name = "Moonrise2")) +
+  theme(legend.position = 'bottom')+
+  theme(plot.title = element_text(face = "bold",size = 18,hjust = .5))
+  
 ```
 
 
-#2. Initial Hypotheses
+# 2. Initial Hypotheses
  
-```{r Graph 2, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Graph 2, echo=FALSE, message=FALSE, warning=FALSE, fig.align= 'center', fig.height=4,fig.width=10}
 ggplot(df.sport) +
-  geom_line(aes(x=Year,y = pct_change,color = Sport)) +
-  facet_wrap(~variable)
+  geom_line(aes(x=Year,y = pct_change,color = Sport),size = 2) +
+  facet_wrap(~variable) +
+  geom_hline(yintercept = 0,linetype = "dashed",color = "red")+
+  labs(title = "Percent Change of High School Athletes by Sport",
+       y = "% Change",
+       caption = "Data provided by NFHS") +
+  theme_minimal() +
+  scale_color_manual(values = wes_palette(name = "Moonrise2")) +
+  theme(legend.position = "bottom")+
+  theme(plot.title = element_text(face = "bold",size = 18,hjust = .5))
 ```
  
-Initial observations for boy's sports shows that football had the most consistent decrease in participation from year to year. Soccer, for both boys and girls sports, was the only sport to have an increase in participation consistently year over year. The largest negative change in participation was for the girls basketball in 2018 and 2019. 
+Initial observations for the boys sports shows that football had the most consistent decrease in participation from year to year. Soccer, for both boys and girls sports, was the only sport to have an increase in participation consistently year over year. Therefore, an initial hypothesis that individual sports are changing in popularity and therefore chaning overall participation will be studied. 
 
-```{r Graph 3, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Graph 3, echo=FALSE, message=FALSE, warning=FALSE , fig.align= 'center', fig.height=4,fig.width=10}
 ggplot(df.SB) +
-  geom_line(aes(x=Year,y = pct_change)) 
+  geom_line(aes(x=Year,y = pct_change),size = 2) + 
+  geom_hline(yintercept = 0,linetype = "dashed",color = "red")+
+  xlim(2010,2018)+
+  labs(title = "Percent Change in Superbowl Viewership",
+       y = "% Change") +
+  theme_minimal() +
+  scale_color_manual(values = wes_palette(name = "Moonrise2"))+
+  theme(plot.title = element_text(face = "bold",size = 18,hjust = .5))
 ```
 
-One initial hypothesis is that national popularity of a given professional sport will indicate high school participation. The plot above demonstrates a similar trend in NFL superbowl viewership change year by year as high school football participation. Professional soccer could be gaining popularity year by year and could be a good explainer as to why its consistently gaining popularity on the high school level.   
+Another initial hypothesis is that national popularity of a given professional sport will indicate high school participation. The plot above demonstrates a similar trend in NFL Superbowl viewership change year by year as high school football participation. Professional soccer could be gaining popularity year by year and could be a good explanation as to why its consistently gaining popularity on the high school level.   
 
-# Potential Data Sources
+# 3. Potential Data Sources
 
-To complete the research, data reresenting the popularity of all four major professional US sports will be collected. Secondly, injury statistics will introduced to observe if higher risk sports are becoming less popular year by year. This data could be used to describe why Football is becoming much less popular. Finally, data surrounding the cost to play each sport will be introduced. More expensive sports may becoming less and less popular. 
+To complete the research, data representing the popularity of all four major professional US sports will be collected. Second, injury statistics will be introduced with the hypothesis that higher risk sports are becoming less popular year by year. This data could be used to describe why Football has a decline in participation. Finally, data expressing the cost to play each sport will be introduced with the hypothesis that cost will explain some of the decline in participation. 
