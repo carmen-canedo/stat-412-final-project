@@ -1,36 +1,20 @@
-Contact sports - total,"126,964"
-Football,"53,657"
-Basketball,"29,675"
-Soccer,"23,847"
-Hockey,"8,110"
-Comative sports,"6,798"
-Miscellaneous contact ball games,"4,877"
-Limited contact sports - total,"56,423"
-Baseball,"14,208"
-Gymnastics,"8,008"
-Skateboarding,"6,857"
-Softball,"5,675"
-Trampolining,"4,906"
-Horseback riding,"3,427"
-Volleyball,"3,268"
-Ice skating,"2,227"
-In-line/roller skating,"2,041"
-Other limited contact sports,"5,806"
-Noncontact sports - total,"68,684"
-Playground,"27,350"
-Bicycling,"25,955"
-Swimming,"6,796"
-Exercise,"5,030"
-Golf,"1,748"
-Track and field,"1,074"
-Racquet sports,570
-Bowling,160
-Recreation - total,"31,447"
-Scooter riding,"5,711"
-All-terrain vehicle riding,"4,702"
-Amusement attractions,"2,989"
-Tobogganing/sledding,"2,988"
-Moped/dirt bike riding,"2,921"
-Other recreation,"1,323"
-Miscellaneous recreation ball games,"4,090"
-Other specified,"6,723"
+Sport, Count, Contact
+Football,"53,657", True
+Basketball,"29,675", True 
+Soccer,"23,847", True
+Hockey,"8,110", True
+Combative sports,"6,798", True
+Miscellaneous contact ball games,"4,877", True
+Total contact count,"126,964", True
+Baseball,"14,208", False
+Gymnastics,"8,008", False
+Skateboarding,"6,857", False
+Softball,"5,675", False
+Trampolining,"4,906", False
+Horseback riding,"3,427", False
+Volleyball,"3,268", False
+Ice skating,"2,227", False
+In-line/roller skating,"2,041", False
+Other limited contact sports,"5,806", False
+Total limited contact count,"56,423", False
+
