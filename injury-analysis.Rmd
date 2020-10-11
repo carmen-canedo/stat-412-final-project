@@ -10,12 +10,13 @@ editor_options:
 # Loading libraries
 ```{r}
 library(tidyverse)
+library(wesanderson)
 ```
 
 # Reading in data
 The data used are as follows:
 
-  + Youth emergency visits among US children for sports-related brain injury from 2010-2016
+  + Youth emergency visits among US children for sports-related brain injuries from 2010-2016
   + US annual average emergency department visits for all sports injuries 2010-2016
   + US emergency department visits ages 5 to 24 from 2010 to 2016 by gender and activity
   + Percent of concussions in US youth that play sports as of 2017
@@ -35,7 +36,29 @@ male_college_sports <- read_csv("data/injury-data/average-number-of-male-sports-
 avg_college_sports <- read_csv("data/injury-data/annual-number-of-college-sports-injuries-in-the-us-by-gender-2009-2014.csv")
 ```
 
-# Bar Graph
+# Bar Graph: Yout emergency visits for brain injuries
+```{r}
+# Getting rid of total counts
+youth_ed_tbi_visits <- youth_ed_tbi_visits %>% 
+  filter(Sport != "Total contact count") %>%
+  filter(Sport != "Total limited contact count")
+
+# Plotting bar graph
+youth_ed_tbi_visits %>% 
+  ggplot(aes(x = reorder(Sport, Count))) +
+  geom_col(aes(y = Count,
+               fill = `Contact Sport`)) +
+  ylim(0, 55000) +
+  scale_fill_manual(values = c("TRUE" = "#6eb4b8", "FALSE" = "#b8816e")) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Youth Emergency Room Visits among US Children for \nSports-Related Brain Injuries",
+       subtitle = "Years: 2010 - 2016",
+       caption = "Centers for Disease Control and Prevention: \n Morbidity and Mortality Weekly Report (March 2019)",
+       x = "Sport",
+       y = "Count")
+```
+
 
 # Histogram
 
