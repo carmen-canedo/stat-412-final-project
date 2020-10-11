@@ -1,5 +1,7 @@
 ---
 title: "Injury Analysis"
+author: "Carmen Canedo"
+date: "11 October 2020"
 output: html_notebook
 editor_options: 
   chunk_output_type: inline
@@ -18,7 +20,9 @@ The data used are as follows:
   + US emergency department visits ages 5 to 24 from 2010 to 2016 by gender and activity
   + Percent of concussions in US youth that play sports as of 2017
   + Survey on the long-term effects of concussions in sports
-  + 
+  + Average annual number of US college female sports injuries during the fall season from 2009 to 2014
+  + Average annual number of US college male sports injuries during the fall season from 2009 to 2014
+  + Average annual number of US college for all seasons from 2009 to 2014 by gender
   
 ```{r}
 youth_ed_tbi_visits <- read_csv("data/injury-data/ed-visits-among-us-children-for-sports-related-brain-injury-2010-2016-by-sport.csv")
@@ -31,3 +35,12 @@ male_college_sports <- read_csv("data/injury-data/average-number-of-male-sports-
 avg_college_sports <- read_csv("data/injury-data/annual-number-of-college-sports-injuries-in-the-us-by-gender-2009-2014.csv")
 ```
 
+# Bar Graph
+
+# Histogram
+
+# Count
+
+# Bar Graph
+
+# Stacked Bar Graph

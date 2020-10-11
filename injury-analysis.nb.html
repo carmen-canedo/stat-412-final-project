@@ -9,7 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Carmen Canedo" />
 
+<meta name="date" content="2020-10-11" />
 
 <title>Injury Analysis</title>
 
@@ -1744,6 +1746,8 @@ summary {
 
 
 <h1 class="title toc-ignore">Injury Analysis</h1>
+<h4 class="author">Carmen Canedo</h4>
+<h4 class="date">11 October 2020</h4>
 
 </div>
 
@@ -1753,9 +1757,6 @@ summary {
 <h1>Loading libraries</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
-<pre class="r"><code>library(tidyverse)</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1768,29 +1769,43 @@ summary {
 <li>US emergency department visits ages 5 to 24 from 2010 to 2016 by gender and activity</li>
 <li>Percent of concussions in US youth that play sports as of 2017</li>
 <li>Survey on the long-term effects of concussions in sports</li>
-<li></li>
+<li>Average annual number of US college female sports injuries during the fall season from 2009 to 2014</li>
+<li>Average annual number of US college male sports injuries during the fall season from 2009 to 2014</li>
+<li>Average annual number of US college for all seasons from 2009 to 2014 by gender</li>
 </ul>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYXZnX2NvbGxlZ2Vfc3BvcnRzIDwtIHJlYWRfY3N2KFwiZGF0YS9pbmp1cnktZGF0YS9hbm51YWwtbnVtYmVyLW9mLWNvbGxlZ2Utc3BvcnRzLWluanVyaWVzLWluLXRoZS11cy1ieS1nZW5kZXItMjAwOS0yMDE0LmNzdlwiKVxuXG5gYGAifQ== -->
-<pre class="r"><code>avg_college_sports &lt;- read_csv(&quot;data/injury-data/annual-number-of-college-sports-injuries-in-the-us-by-gender-2009-2014.csv&quot;)
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueW91dGhfZWRfdGJpX3Zpc2l0cyA8LSByZWFkX2NzdihcImRhdGEvaW5qdXJ5LWRhdGEvZWQtdmlzaXRzLWFtb25nLXVzLWNoaWxkcmVuLWZvci1zcG9ydHMtcmVsYXRlZC1icmFpbi1pbmp1cnktMjAxMC0yMDE2LWJ5LXNwb3J0LmNzdlwiKVxuZ2VuZXJhbF9lZF92aXNpdHMgPC0gcmVhZF9jc3YoXCJkYXRhL2luanVyeS1kYXRhL3VzLWFubnVhbC1hdmVyYWdlLWVtZXJnZW5jeS1kZXBhcnRtZW50LXZpc2l0cy1mb3Itc3BvcnRzLWluanVyaWVzLTIwMTAtMjAxNi1ieS1hZ2UuY3N2XCIpXG5zcG9ydF9lZF92aXNpdHMgPC0gcmVhZF9jc3YoXCJkYXRhL2luanVyeS1kYXRhL3VzLWVtZXJnZW5jeS1kZXBhcnRtZW50LXZpc2l0cy1hZ2VzLTUtMjQtMjAxMC0yMDE2LWJ5LWdlbmRlci1hbmQtYWN0aXZpdHkuY3N2XCIpXG5udW1fY29uc2N1c3Npb25zXzIwMTcgPC0gcmVhZF9jc3YoXCJkYXRhL2luanVyeS1kYXRhL251bWJlci1vZi1jb25jdXNzaW9ucy1zdWZmZXJlZC1ieS11cy15b3V0aC10aGF0LXBsYXllZC1zcG9ydHMtYXMtb2YtMjAxNy1ieS1nZW5kZXIuY3N2XCIpXG5zdXJ2ZXlfdGJpX2VmZmVjdHMgPC0gcmVhZF9jc3YoXCJkYXRhL2luanVyeS1kYXRhL3N1cnZleS1vbi1jb25jdXNzaW9ucy1zdWZmZXJlZC1pbi1zcG9ydHMtYW5kLWxvbmctdGVybS1icmFpbi1kYW1hZ2UtLS1lZmZlY3RzLTIwMTQuY3N2XCIpXG5mZW1hbGVfY29sbGVnZV9zcG9ydHMgPC0gcmVhZF9jc3YoXCJkYXRhL2luanVyeS1kYXRhL2FubnVhbC1udW1iZXItb2YtdXMtY29sbGVnZS1mZW1hbGUtc3BvcnRzLWluanVyaWVzLWR1cmluZy1mYWxsLXNlYXNvbi0yMDA5LTIwMTQuY3N2XCIpXG5tYWxlX2NvbGxlZ2Vfc3BvcnRzIDwtIHJlYWRfY3N2KFwiZGF0YS9pbmp1cnktZGF0YS9hdmVyYWdlLW51bWJlci1vZi1tYWxlLXNwb3J0cy1pbmp1cmllcy1kdXJpbmctdXMtY29sbGVnZS1mYWxsLXNlYXNvbi0yMDA5LTIwMTQuY3N2XCIpXG5hdmdfY29sbGVnZV9zcG9ydHMgPC0gcmVhZF9jc3YoXCJkYXRhL2luanVyeS1kYXRhL2FubnVhbC1udW1iZXItb2YtY29sbGVnZS1zcG9ydHMtaW5qdXJpZXMtaW4tdGhlLXVzLWJ5LWdlbmRlci0yMDA5LTIwMTQuY3N2XCIpXG5gYGAifQ== -->
+<pre class="r"><code>youth_ed_tbi_visits &lt;- read_csv(&quot;data/injury-data/ed-visits-among-us-children-for-sports-related-brain-injury-2010-2016-by-sport.csv&quot;)
+general_ed_visits &lt;- read_csv(&quot;data/injury-data/us-annual-average-emergency-department-visits-for-sports-injuries-2010-2016-by-age.csv&quot;)
+sport_ed_visits &lt;- read_csv(&quot;data/injury-data/us-emergency-department-visits-ages-5-24-2010-2016-by-gender-and-activity.csv&quot;)
+num_conscussions_2017 &lt;- read_csv(&quot;data/injury-data/number-of-concussions-suffered-by-us-youth-that-played-sports-as-of-2017-by-gender.csv&quot;)
+survey_tbi_effects &lt;- read_csv(&quot;data/injury-data/survey-on-concussions-suffered-in-sports-and-long-term-brain-damage---effects-2014.csv&quot;)
+female_college_sports &lt;- read_csv(&quot;data/injury-data/annual-number-of-us-college-female-sports-injuries-during-fall-season-2009-2014.csv&quot;)
+male_college_sports &lt;- read_csv(&quot;data/injury-data/average-number-of-male-sports-injuries-during-us-college-fall-season-2009-2014.csv&quot;)
+avg_college_sports &lt;- read_csv(&quot;data/injury-data/annual-number-of-college-sports-injuries-in-the-us-by-gender-2009-2014.csv&quot;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICBDYXRlZ29yeSA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgQ29tcGV0aXRpb24gPSBjb2xfbnVtYmVyKCksXG4gIFByYWN0aWNlID0gY29sX251bWJlcigpLFxuICBPdmVyYWxsID0gY29sX251bWJlcigpXG4pXG4ifQ== -->
-<pre><code>Parsed with column specification:
-cols(
-  Category = col_character(),
-  Competition = col_number(),
-  Practice = col_number(),
-  Overall = col_number()
-)</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
+<div id="bar-graph" class="section level1">
+<h1>Bar Graph</h1>
+</div>
+<div id="histogram" class="section level1">
+<h1>Histogram</h1>
+</div>
+<div id="count" class="section level1">
+<h1>Count</h1>
+</div>
+<div id="bar-graph-1" class="section level1">
+<h1>Bar Graph</h1>
+</div>
+<div id="stacked-bar-graph" class="section level1">
+<h1>Stacked Bar Graph</h1>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiSW5qdXJ5IEFuYWx5c2lzIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKZWRpdG9yX29wdGlvbnM6IAogIGNodW5rX291dHB1dF90eXBlOiBpbmxpbmUKLS0tCgojIExvYWRpbmcgbGlicmFyaWVzCmBgYHtyfQpsaWJyYXJ5KHRpZHl2ZXJzZSkKYGBgCgojIFJlYWRpbmcgaW4gZGF0YQpUaGUgZGF0YSB1c2VkIGFyZSBhcyBmb2xsb3dzOgoKICArIFlvdXRoIGVtZXJnZW5jeSB2aXNpdHMgYW1vbmcgVVMgY2hpbGRyZW4gZm9yIHNwb3J0cy1yZWxhdGVkIGJyYWluIGluanVyeSBmcm9tIDIwMTAtMjAxNgogICsgVVMgYW5udWFsIGF2ZXJhZ2UgZW1lcmdlbmN5IGRlcGFydG1lbnQgdmlzaXRzIGZvciBhbGwgc3BvcnRzIGluanVyaWVzIDIwMTAtMjAxNgogICsgVVMgZW1lcmdlbmN5IGRlcGFydG1lbnQgdmlzaXRzIGFnZXMgNSB0byAyNCBmcm9tIDIwMTAgdG8gMjAxNiBieSBnZW5kZXIgYW5kIGFjdGl2aXR5CiAgKyBQZXJjZW50IG9mIGNvbmN1c3Npb25zIGluIFVTIHlvdXRoIHRoYXQgcGxheSBzcG9ydHMgYXMgb2YgMjAxNwogICsgU3VydmV5IG9uIHRoZSBsb25nLXRlcm0gZWZmZWN0cyBvZiBjb25jdXNzaW9ucyBpbiBzcG9ydHMKICArIAogIApgYGB7cn0KeW91dGhfZWRfdGJpX3Zpc2l0cyA8LSByZWFkX2NzdigiZGF0YS9pbmp1cnktZGF0YS9lZC12aXNpdHMtYW1vbmctdXMtY2hpbGRyZW4tZm9yLXNwb3J0cy1yZWxhdGVkLWJyYWluLWluanVyeS0yMDEwLTIwMTYtYnktc3BvcnQuY3N2IikKZ2VuZXJhbF9lZF92aXNpdHMgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvdXMtYW5udWFsLWF2ZXJhZ2UtZW1lcmdlbmN5LWRlcGFydG1lbnQtdmlzaXRzLWZvci1zcG9ydHMtaW5qdXJpZXMtMjAxMC0yMDE2LWJ5LWFnZS5jc3YiKQpzcG9ydF9lZF92aXNpdHMgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvdXMtZW1lcmdlbmN5LWRlcGFydG1lbnQtdmlzaXRzLWFnZXMtNS0yNC0yMDEwLTIwMTYtYnktZ2VuZGVyLWFuZC1hY3Rpdml0eS5jc3YiKQpudW1fY29uc2N1c3Npb25zXzIwMTcgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvbnVtYmVyLW9mLWNvbmN1c3Npb25zLXN1ZmZlcmVkLWJ5LXVzLXlvdXRoLXRoYXQtcGxheWVkLXNwb3J0cy1hcy1vZi0yMDE3LWJ5LWdlbmRlci5jc3YiKQpzdXJ2ZXlfdGJpX2VmZmVjdHMgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvc3VydmV5LW9uLWNvbmN1c3Npb25zLXN1ZmZlcmVkLWluLXNwb3J0cy1hbmQtbG9uZy10ZXJtLWJyYWluLWRhbWFnZS0tLWVmZmVjdHMtMjAxNC5jc3YiKQpmZW1hbGVfY29sbGVnZV9zcG9ydHMgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvYW5udWFsLW51bWJlci1vZi11cy1jb2xsZWdlLWZlbWFsZS1zcG9ydHMtaW5qdXJpZXMtZHVyaW5nLWZhbGwtc2Vhc29uLTIwMDktMjAxNC5jc3YiKQptYWxlX2NvbGxlZ2Vfc3BvcnRzIDwtIHJlYWRfY3N2KCJkYXRhL2luanVyeS1kYXRhL2F2ZXJhZ2UtbnVtYmVyLW9mLW1hbGUtc3BvcnRzLWluanVyaWVzLWR1cmluZy11cy1jb2xsZWdlLWZhbGwtc2Vhc29uLTIwMDktMjAxNC5jc3YiKQphdmdfY29sbGVnZV9zcG9ydHMgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvYW5udWFsLW51bWJlci1vZi1jb2xsZWdlLXNwb3J0cy1pbmp1cmllcy1pbi10aGUtdXMtYnktZ2VuZGVyLTIwMDktMjAxNC5jc3YiKQpgYGAKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiSW5qdXJ5IEFuYWx5c2lzIgphdXRob3I6ICJDYXJtZW4gQ2FuZWRvIgpkYXRlOiAiMTEgT2N0b2JlciAyMDIwIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKZWRpdG9yX29wdGlvbnM6IAogIGNodW5rX291dHB1dF90eXBlOiBpbmxpbmUKLS0tCgojIExvYWRpbmcgbGlicmFyaWVzCmBgYHtyfQpsaWJyYXJ5KHRpZHl2ZXJzZSkKYGBgCgojIFJlYWRpbmcgaW4gZGF0YQpUaGUgZGF0YSB1c2VkIGFyZSBhcyBmb2xsb3dzOgoKICArIFlvdXRoIGVtZXJnZW5jeSB2aXNpdHMgYW1vbmcgVVMgY2hpbGRyZW4gZm9yIHNwb3J0cy1yZWxhdGVkIGJyYWluIGluanVyeSBmcm9tIDIwMTAtMjAxNgogICsgVVMgYW5udWFsIGF2ZXJhZ2UgZW1lcmdlbmN5IGRlcGFydG1lbnQgdmlzaXRzIGZvciBhbGwgc3BvcnRzIGluanVyaWVzIDIwMTAtMjAxNgogICsgVVMgZW1lcmdlbmN5IGRlcGFydG1lbnQgdmlzaXRzIGFnZXMgNSB0byAyNCBmcm9tIDIwMTAgdG8gMjAxNiBieSBnZW5kZXIgYW5kIGFjdGl2aXR5CiAgKyBQZXJjZW50IG9mIGNvbmN1c3Npb25zIGluIFVTIHlvdXRoIHRoYXQgcGxheSBzcG9ydHMgYXMgb2YgMjAxNwogICsgU3VydmV5IG9uIHRoZSBsb25nLXRlcm0gZWZmZWN0cyBvZiBjb25jdXNzaW9ucyBpbiBzcG9ydHMKICArIEF2ZXJhZ2UgYW5udWFsIG51bWJlciBvZiBVUyBjb2xsZWdlIGZlbWFsZSBzcG9ydHMgaW5qdXJpZXMgZHVyaW5nIHRoZSBmYWxsIHNlYXNvbiBmcm9tIDIwMDkgdG8gMjAxNAogICsgQXZlcmFnZSBhbm51YWwgbnVtYmVyIG9mIFVTIGNvbGxlZ2UgbWFsZSBzcG9ydHMgaW5qdXJpZXMgZHVyaW5nIHRoZSBmYWxsIHNlYXNvbiBmcm9tIDIwMDkgdG8gMjAxNAogICsgQXZlcmFnZSBhbm51YWwgbnVtYmVyIG9mIFVTIGNvbGxlZ2UgZm9yIGFsbCBzZWFzb25zIGZyb20gMjAwOSB0byAyMDE0IGJ5IGdlbmRlcgogIApgYGB7cn0KeW91dGhfZWRfdGJpX3Zpc2l0cyA8LSByZWFkX2NzdigiZGF0YS9pbmp1cnktZGF0YS9lZC12aXNpdHMtYW1vbmctdXMtY2hpbGRyZW4tZm9yLXNwb3J0cy1yZWxhdGVkLWJyYWluLWluanVyeS0yMDEwLTIwMTYtYnktc3BvcnQuY3N2IikKZ2VuZXJhbF9lZF92aXNpdHMgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvdXMtYW5udWFsLWF2ZXJhZ2UtZW1lcmdlbmN5LWRlcGFydG1lbnQtdmlzaXRzLWZvci1zcG9ydHMtaW5qdXJpZXMtMjAxMC0yMDE2LWJ5LWFnZS5jc3YiKQpzcG9ydF9lZF92aXNpdHMgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvdXMtZW1lcmdlbmN5LWRlcGFydG1lbnQtdmlzaXRzLWFnZXMtNS0yNC0yMDEwLTIwMTYtYnktZ2VuZGVyLWFuZC1hY3Rpdml0eS5jc3YiKQpudW1fY29uc2N1c3Npb25zXzIwMTcgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvbnVtYmVyLW9mLWNvbmN1c3Npb25zLXN1ZmZlcmVkLWJ5LXVzLXlvdXRoLXRoYXQtcGxheWVkLXNwb3J0cy1hcy1vZi0yMDE3LWJ5LWdlbmRlci5jc3YiKQpzdXJ2ZXlfdGJpX2VmZmVjdHMgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvc3VydmV5LW9uLWNvbmN1c3Npb25zLXN1ZmZlcmVkLWluLXNwb3J0cy1hbmQtbG9uZy10ZXJtLWJyYWluLWRhbWFnZS0tLWVmZmVjdHMtMjAxNC5jc3YiKQpmZW1hbGVfY29sbGVnZV9zcG9ydHMgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvYW5udWFsLW51bWJlci1vZi11cy1jb2xsZWdlLWZlbWFsZS1zcG9ydHMtaW5qdXJpZXMtZHVyaW5nLWZhbGwtc2Vhc29uLTIwMDktMjAxNC5jc3YiKQptYWxlX2NvbGxlZ2Vfc3BvcnRzIDwtIHJlYWRfY3N2KCJkYXRhL2luanVyeS1kYXRhL2F2ZXJhZ2UtbnVtYmVyLW9mLW1hbGUtc3BvcnRzLWluanVyaWVzLWR1cmluZy11cy1jb2xsZWdlLWZhbGwtc2Vhc29uLTIwMDktMjAxNC5jc3YiKQphdmdfY29sbGVnZV9zcG9ydHMgPC0gcmVhZF9jc3YoImRhdGEvaW5qdXJ5LWRhdGEvYW5udWFsLW51bWJlci1vZi1jb2xsZWdlLXNwb3J0cy1pbmp1cmllcy1pbi10aGUtdXMtYnktZ2VuZGVyLTIwMDktMjAxNC5jc3YiKQpgYGAKCiMgQmFyIEdyYXBoCgojIEhpc3RvZ3JhbQoKIyBDb3VudAoKIyBCYXIgR3JhcGgKCiMgU3RhY2tlZCBCYXIgR3JhcGg=</div>
 
 
 
