@@ -29,14 +29,14 @@ The data used are as follows:
 youth_ed_tbi_visits <- read_csv("data/injury-data/ed-visits-among-us-children-for-sports-related-brain-injury-2010-2016-by-sport.csv")
 general_ed_visits <- read_csv("data/injury-data/us-annual-average-emergency-department-visits-for-sports-injuries-2010-2016-by-age.csv")
 sport_ed_visits <- read_csv("data/injury-data/us-emergency-department-visits-ages-5-24-2010-2016-by-gender-and-activity.csv")
-num_conscussions_2017 <- read_csv("data/injury-data/number-of-concussions-suffered-by-us-youth-that-played-sports-as-of-2017-by-gender.csv")
+num_concussions_2017 <- read_csv("data/injury-data/number-of-concussions-suffered-by-us-youth-that-played-sports-as-of-2017-by-gender.csv")
 survey_tbi_effects <- read_csv("data/injury-data/survey-on-concussions-suffered-in-sports-and-long-term-brain-damage---effects-2014.csv")
 female_college_sports <- read_csv("data/injury-data/annual-number-of-us-college-female-sports-injuries-during-fall-season-2009-2014.csv")
 male_college_sports <- read_csv("data/injury-data/average-number-of-male-sports-injuries-during-us-college-fall-season-2009-2014.csv")
 avg_college_sports <- read_csv("data/injury-data/annual-number-of-college-sports-injuries-in-the-us-by-gender-2009-2014.csv")
 ```
 
-# Bar Graph: Yout emergency visits for brain injuries
+# Bar Graph: Youth emergency visits for brain injuries
 ```{r}
 # Getting rid of total counts
 youth_ed_tbi_visits <- youth_ed_tbi_visits %>% 
@@ -54,7 +54,7 @@ youth_ed_tbi_visits %>%
   theme_minimal() +
   labs(title = "Youth Emergency Room Visits among US Children for \nSports-Related Brain Injuries",
        subtitle = "Years: 2010 - 2016",
-       caption = "Centers for Disease Control and Prevention: \n Morbidity and Mortality Weekly Report (March 2019)",
+       caption = "Centers for Disease Control and Prevention (CDC): \n Morbidity and Mortality Weekly Report (March 2019)",
        x = "Sport",
        y = "Count")
 ```
@@ -64,6 +64,27 @@ youth_ed_tbi_visits %>%
 
 # Count
 
-# Bar Graph
+# Bar Graph: Number of concussions by gender
+```{r}
+num_concussions_2017 <- num_concussions_2017 %>% 
+  pivot_longer(cols = c(male, female)) %>% 
+  rename(gender = name)
+
+
+num_concussions_2017 %>% 
+   ggplot(aes(x = concussions, y = value, fill = gender)) +
+   geom_col(position = "dodge") +
+  scale_fill_manual(values = c("female" = "#706eb8",
+                               "male" = "#91b86e")) +
+  labs(title = "Percent of Concussions in US Youth That Play Sports by Gender",
+       subtitle = "Year: 2017",
+       caption = "CDC: Self-Reported Concussions from Playing a Sport or Being Physically Active
+Among High School Students",
+       x = "",
+       y = "Percent") +
+  theme_minimal()
+```
+
+
 
 # Stacked Bar Graph
