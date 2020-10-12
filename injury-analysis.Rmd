@@ -10,7 +10,7 @@ editor_options:
 # Loading libraries
 ```{r}
 library(tidyverse)
-library(wesanderson)
+library(likert)
 ```
 
 # Reading in data
@@ -85,6 +85,49 @@ Among High School Students",
   theme_minimal()
 ```
 
-
-
 # Stacked Bar Graph
+```{r}
+survey_levels <- c("Not at all sure",
+                   "Strongly disagree",
+                   "Somewhat disagree",
+                   "Somewhat agree",
+                   "Strongly agree")
+
+# Getting rid of Statement column to convert numbers to percents
+survey_interim <- survey_tbi_effects %>% 
+  select(-Statement)
+
+# Calculating percentages
+data_percentage <- survey_interim %>% 
+  apply(2,
+        function(x){
+          perc <- x / sum(x)
+          round(perc, digits = 2)
+          })
+
+# Adding the statement column back
+data_percentage <- cbind(survey_tbi_effects$Statement, data_percentage) %>% 
+  as_tibble() %>% 
+  group_by(-V1) %>% 
+  summarise(diff = 1 - sum())
+
+# Renaming column
+data_percentage <- data_percentage %>% 
+  rename(statement = V1)
+
+# Pivot long
+long_percentage <- data_percentage %>% 
+  pivot_longer(cols = contains("r")) %>% 
+  rename(response = name)
+
+```
+
+```{r}
+set_colors <- c("#91b86e", "#956eb8", "#b86e90", "#6eb895", "#b8816e", "#b6b86e")
+
+# Making graph
+data_percentage %>% 
+  ggplot(aes(y = value, x = statement)) +
+  geom_col(position = "fill")
+```
+
