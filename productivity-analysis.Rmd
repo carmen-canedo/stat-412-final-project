@@ -1,0 +1,33 @@
+---
+title: "Superbowl Viewership vs Worker Productivity"
+author: "Joseph Bernardi"
+date: "10/12/2020"
+output: word_document
+---
+
+### Goal
+
+This exploration seeks to identify the correlation between Superbowl Viewership and US Worker Productivity. The idea behind this common hypothesis is that as working class people devote more hours per day to their jobs, the less likely that they will watch sporting events such as the Superbowl.
+
+### Methods and Data
+
+In order to quantify worker productivity data, I will be using "Real Output Per Hour of All Persons" from the Federal Reserve Bank of St. Louis' Economic Research data, more specifically, in the nonfarm sector (meaning farming is not included). I will also be using the total yearly viewership of the Superbowl. Both inputs will are represented as percent change via Microsoft Excel.
+
+### Visualization
+
+```{r echo=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+
+proddata <- read.csv("data/productivity-data/prod_vs_viewing.csv")
+
+proddata
+
+df <- proddata %>%
+  select(ï..Year, pctchangeSuperBowl, pctchangeWorkerProd)
+  gather(key = "key", value = "val", -Year)
+
+head(df)
+
+```

@@ -2,8 +2,8 @@
 title: "High School Participation in Athletics"
 author: "Mason Kellett, Carmen Canedo, Joseph Bernardi, David Leshchiner"
 output:
-  pdf_document: default
   word_document: default
+  pdf_document: default
   html_notebook: default
 ---
 
@@ -99,7 +99,7 @@ ggplot(df.sport) +
   theme(plot.title = element_text(face = "bold",size = 18,hjust = .5))
 ```
  
-Initial observations for the boys sports shows that football had the most consistent decrease in participation from year to year. Soccer, for both boys and girls sports, was the only sport to have an increase in participation consistently year over year. Therefore, an initial hypothesis that individual sports are changing in popularity and therefore chaning overall participation will be studied. 
+Initial observations for the boys sports shows that football had the most consistent decrease in participation from year to year. Soccer, for both boys and girls sports, was the only sport to have an increase in participation consistently year over year. Therefore, an initial hypothesis that individual sports are changing in popularity and therefore changing overall participation will be studied. 
 
 ```{r Graph 3, echo=FALSE, message=FALSE, warning=FALSE , fig.align= 'center', fig.height=4,fig.width=10}
 ggplot(df.SB) +
