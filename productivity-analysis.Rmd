@@ -22,12 +22,17 @@ library(ggplot2)
 
 proddata <- read.csv("data/productivity-data/prod_vs_viewing.csv")
 
-proddata
+df <- as_tibble(proddata)
 
-df <- proddata %>%
-  select(ï..Year, pctchangeSuperBowl, pctchangeWorkerProd)
-  gather(key = "key", value = "val", -Year)
+ggplot(df, aes(ï..Year)) + 
+  geom_line(aes(y = pctchangeSuperBowl, colour = "pctchangeSuperBowl")) + 
+  geom_line(aes(y = pctchangeWorkerProd, colour = "pctchangeWorkerProd"))
 
-head(df)
 
+  
 ```
+
+
+### Interpretations and Conclusions
+
+There are not necessarily any major interpretations regarding the correlation between worker productivity and Superbowl viewership from this visualization. One observation is that when worker productivity began to dip around 2017, Superbowl viewership did rise to an extent. However, at the beginning of the time frame, there seemed to be a positive correlation between the two inputs. To conclude, one can observe that there does not seem to be any consistent correlation between these two inputs.
