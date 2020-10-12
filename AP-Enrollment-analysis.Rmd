@@ -1,0 +1,39 @@
+---
+title: "AP Enrollment and HS Sports Participation"
+author: "Joseph Bernardi"
+date: "10/12/2020"
+output: word_document
+---
+
+### Goal
+
+This exploration seeks to identify the correlation between AP program enrollment and HS student participation in sports. The idea behind this common hypothesis is that as students enroll more and more in competitive and demanding AP Programs, they will be less likely to engage in sports.
+
+### Methods and Data
+
+In order to quantify AP enrollment data, I will use the CollegeBoard's "AP Program Participation and Performance Data." In terms of student involvement in sports, I will be using the previously addressed data set from the topic proposal and totaling all sports and genders into yearly data.
+
+### Visualization
+
+```{r echo=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+
+proddata <- read.csv("data/productivity-data/APvsSports.csv")
+
+df <- as_tibble(proddata)
+
+
+ggplot(df, aes(ï..Year)) + 
+  geom_line(aes(y = X..Change.in.HS.Sports.Participation, colour = "X..Change.in.HS.Sports.Participation")) + 
+  geom_line(aes(y = X..Change.in.AP.Program.Enrollment, colour = "X..Change.in.AP.Program.Enrollment"))
+
+
+  
+```
+
+
+### Interpretations and Conclusions
+
+There are not necessarily any major interpretations regarding the correlation between AP enrollment and HS sports participation from this visualization. One observation is that when AP enrollment began to dip around 2017, participation in sports began to lower as well. While there are multiple points that represent a positive relationship, which would be demonstrating the opposite of what our hypothesis would purvey, there are also points in the center of the time frame that demonstrate a negative relationship. To conclude, one can observe that there does not seem to be any consistent correlation between these two inputs.
