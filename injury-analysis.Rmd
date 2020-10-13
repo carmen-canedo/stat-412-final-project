@@ -61,8 +61,10 @@ youth_ed_tbi_visits %>%
 
 
 # Histogram
+Decided not to do
 
 # Count
+Decided not to do
 
 # Bar Graph: Number of concussions by gender
 ```{r}
@@ -75,7 +77,8 @@ num_concussions_2017 %>%
    ggplot(aes(x = concussions, y = value, fill = gender)) +
    geom_col(position = "dodge") +
   scale_fill_manual(values = c("female" = "#706eb8",
-                               "male" = "#91b86e")) +
+                               "male" = "#91b86e"),
+                    name = "Gender") +
   labs(title = "Percent of Concussions in US Youth That Play Sports by Gender",
        subtitle = "Year: 2017",
        caption = "CDC: Self-Reported Concussions from Playing a Sport or Being Physically Active
@@ -87,12 +90,22 @@ Among High School Students",
 
 # Stacked Bar Graph
 ```{r}
-survey_levels <- c("Not at all sure",
-                   "Strongly disagree",
-                   "Somewhat disagree",
-                   "Somewhat agree",
-                   "Strongly agree")
+text_statements <- c("Players who suffer a head injury should be required to take a minimum set amount of time off from playing to recover.",
+                     "Helmets should be changed to better protect against concussions.",
+                     "The risks of playing football are widely known and players participate at their own risk.",
+                     "There should be a standardized test used to determine if and when injured players at all levels may return to the field.",
+                     "Aggressive tackles which are more prone to leading to head injuries should be restricted in youth football.")
 
+survey_levels <- c(
+  "Strongly agree",
+  "Somewhat agree",
+  "Somewhat disagree",
+  "Strongly disagree",
+  "Not at all sure"
+)
+```
+
+```{r}
 # Getting rid of Statement column to convert numbers to percents
 survey_interim <- survey_tbi_effects %>% 
   select(-Statement)
@@ -105,15 +118,27 @@ data_percentage <- survey_interim %>%
           round(perc, digits = 2)
           })
 
+# Converting to tibble and adding final column so it equals 1
+diff_interim <- data_percentage %>% 
+  as_tibble() %>% 
+  select_if(is.numeric) %>% 
+  mutate(sum = rowSums(.[1:5])) %>% 
+  mutate(diff = 1 - sum)
+
+# Saving into data_percentage
+data_percentage <- diff_interim %>% 
+  select(-sum)
+  
+
 # Adding the statement column back
 data_percentage <- cbind(survey_tbi_effects$Statement, data_percentage) %>% 
-  as_tibble() %>% 
-  group_by(-V1) %>% 
-  summarise(diff = 1 - sum())
+  as_tibble()  %>% 
+  slice(1:5)
+
 
 # Renaming column
 data_percentage <- data_percentage %>% 
-  rename(statement = V1)
+  rename(Statement = `survey_tbi_effects$Statement`)
 
 # Pivot long
 long_percentage <- data_percentage %>% 
@@ -124,10 +149,19 @@ long_percentage <- data_percentage %>%
 
 ```{r}
 set_colors <- c("#91b86e", "#956eb8", "#b86e90", "#6eb895", "#b8816e", "#b6b86e")
+xlabels <- c("1", "2", "3", "4", "5")
 
 # Making graph
-data_percentage %>% 
-  ggplot(aes(y = value, x = statement)) +
-  geom_col(position = "fill")
-```
+stacked_survey <- long_percentage %>% 
+  ggplot(aes(x = Statement, y = value, fill = response)) +
+  geom_col(position = "fill") +
+  scale_fill_manual(values = set_colors, name = "Response") +
+  scale_x_discrete(labels = xlabels) +
+  labs(title = "Survey Responses on The Long-Term Effects of Concussions in Sports",
+       subtitle = "2014",
+       caption = "Source: Harris Interactive | The Harris Poll #92",
+       y = "") +
+  theme_light()
 
+stacked_survey
+```
