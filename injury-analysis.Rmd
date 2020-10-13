@@ -2,8 +2,10 @@
 title: "Injury Analysis"
 author: "Carmen Canedo"
 date: "11 October 2020"
-output: html_notebook
-editor_options: 
+output:
+  pdf_document: default
+  html_notebook: default
+editor_options:
   chunk_output_type: inline
 ---
 
