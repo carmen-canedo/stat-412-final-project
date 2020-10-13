@@ -19,6 +19,7 @@ In order to quantify AP enrollment data, I will use the CollegeBoard's "AP Progr
 
 library(tidyverse)
 library(ggplot2)
+library(ggthemes)
 
 proddata <- read.csv("data/productivity-data/APvsSports.csv")
 
@@ -26,8 +27,8 @@ df <- as_tibble(proddata)
 
 
 ggplot(df, aes(ï..Year)) + 
-  geom_line(aes(y = X..Change.in.HS.Sports.Participation, colour = "X..Change.in.HS.Sports.Participation")) + 
-  geom_line(aes(y = X..Change.in.AP.Program.Enrollment, colour = "X..Change.in.AP.Program.Enrollment"))
+  geom_line(aes(y = X..Change.in.HS.Sports.Participation, colour = "Percent Change in HS Sports Participation")) + 
+  geom_line(aes(y = X..Change.in.AP.Program.Enrollment, colour = "Percent Change in AP Program Enrollment")) + labs(y="Percent Change", x="Year", title = "AP Program Enrollment and HS Sports Participation") + theme_economist()
 
 
   
