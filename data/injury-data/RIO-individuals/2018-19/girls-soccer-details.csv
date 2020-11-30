@@ -1,0 +1,17 @@
+﻿Activity,Strain/Sprain,Contusion,Fracture,Concussion,Other
+General play,22802,2623,1058,9193,15402
+Defending,12440,3416,3233,9562,3946
+Goaltending,2156,1740,70,4678,1139
+Ball handling/dribbling,7892,4730,0,796,724
+Chasing loose ball,6539,654,0,1566,1010
+Shooting (foot),8738,0,0,0,2316
+Blocking shot,1229,0,1266,229,0
+Conditioning,6234,0,0,0,2269
+Heading ball,0,355,0,8230,0
+Passing (foot),3738,70,0,221,1367
+Receiving pass,5917,355,0,3701,926
+Attempting a slide tackle,865,0,0,0,0
+Receiving a slide tackle,1272,0,0,0,0
+Other,1450,0,0,450,229
+Unknown,12276,6329,865,7377,8874
+Total,93548,20272,6492,46001,38202

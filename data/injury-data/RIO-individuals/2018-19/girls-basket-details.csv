@@ -1,0 +1,13 @@
+Activity,Strain/Sprain,Contusion,Fracture,Concussion,Other
+Rebounding,8175,1404,107,3317,731
+Defending,4596,927,1153,4838,1067
+General play,8742,268,373,2361,2933
+Chasing loose ball,2977,161,1258,2339,1169
+Shooting,2422,73,1442,0,232
+Handling/dribbling,3412,695,268,393,532
+Receiving pass,587,232,339,268,528
+Conditioning,2384,0,0,107,0
+Passing,714,0,73,0,0
+Other,746,0,0,107,1898
+Unknown,3581,819,856,2536,2195
+Total,38336,4579,5869,16266,11636

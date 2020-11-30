@@ -1,0 +1,9 @@
+﻿Activity,Strain/Sprain,Contusion,Fracture,Concussion,Other
+Being tackled,33870,21342,10725,28744,8907
+Tackling,29161,8757,9296,20670,18548
+Blocking,28584,4121,3080,14219,8887
+Being blocked,13019,3504,3328,12854,4429
+No contact (overuse/illness),8264,0,432,0,16567
+Other,35153,7168,7985,2454,9767
+Unknown,17873,6929,4623,12528,5748
+Total,165924,51821,39469,91469,72853

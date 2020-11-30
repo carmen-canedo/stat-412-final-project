@@ -1,0 +1,12 @@
+Activity,Strain/Sprain,Contusion,Fracture,Concussion,Other
+General play,5818,783,0,936,2341
+Spiking,2535,0,0,0,625
+Digging,2779,858,961,3107,1429
+Conditioning,917,0,0,135,1221
+Serving,2900,0,0,1352,1530
+Setting,1630,0,468,103,0
+Blocking,7135,603,64,938,674
+Passing,3093,103,1171,584,0
+Other,272,0,470,753,0
+Unknown,2495,1039,817,706,1556
+Total,29574,3386,3951,8614,9376

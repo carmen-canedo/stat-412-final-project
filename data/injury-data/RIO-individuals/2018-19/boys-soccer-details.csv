@@ -1,0 +1,14 @@
+Activity,Strain/Sprain,Contusion,Fracture,Concussion,Other
+Fielding a thrown ball,411,1061,0,0,243
+Fielding a batted ball,1861,1430,1330,2303,1673
+Throwing not pitching,2104,0,281,281,1678
+Running bases,5684,0,281,0,1505
+Batting,524,869,2981,1280,1593
+Sliding,1224,0,800,0,480
+Pitching,7099,819,281,0,648
+Catching,313,550,1930,69,899
+General play,604,0,168,0,562
+Conditioning,0,0,361,0,0
+Other,0,0,519,361,455
+Unknown,722,0,119,562,1956
+Total,20546,4729,9051,4856,11692
