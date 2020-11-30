@@ -1,0 +1,114 @@
+---
+title: "FinalPresentation"
+author: "Mason Kellett"
+output: pdf_document
+---
+```{r Setup Mason Kellett, message=FALSE, warning=FALSE, include=FALSE}
+source("setup.R")
+```
+## Athlete Participation  
+```{r Problem Setup Mason Kellett, echo=FALSE, message=FALSE, warning=FALSE}
+sport %>%
+  group_by(Year) %>%
+  summarise(Boys = sum(Boys),
+            Girls = sum(Girls)) %>%
+  left_join(enroll,
+            by = "Year") %>%
+  mutate(Pct_Boys = ((Boys/lag(Boys)-1)*100),
+         Pct_Girls = ((Girls/lag(Girls)-1)*100),
+         Pct_Students = ((Students/lag(Students)-1)*100)) %>%
+  na.omit() %>%
+  pivot_longer(cols = c(Pct_Boys,Pct_Girls,Pct_Students),
+               names_to = "Type",
+               values_to = "Change") %>%
+  ggplot() +
+  geom_smooth(aes(x = Year,y = Change, color = Type), size = 1.5, se = F) + 
+  geom_hline(yintercept = 0,linetype = "dashed",color = "red")+
+  xlim(2011,2018)+
+  labs(title = "Percent Change in Total High School Athletes",
+       subtitle = "Comapred with Percent Change in Total High School Students",
+       y = "% Change",
+       caption = "Data provided by NFHS") +
+  theme_minimal() +
+  scale_color_manual(values = wes_palette(name = "Moonrise2"),
+                     name = "",
+                     labels = c("Male Althletes","Female Athletes","Total Students")) +
+  theme(legend.position = 'bottom') +
+  theme(plot.title = element_text(face = "bold",size = 18,hjust = .5))
+```
+  Over the past 10 years there have been changes in the number of students who are participating in sport. As shown in the graph above, from about 2010 to 2015, both male and female participation changed fairly closely with the totla number of high school student in the United States. However, starting in about 2016 we see that the sport participation pulls away from the number of high school students. In this project report, we will analyze what charateristics of sport have caused the decline in sport participation.   
+  
+
+```{r By Gender and Sport Mason Kellett, echo=FALSE, message=FALSE, warning=FALSE}
+enroll_pct_change <- enroll %>%
+  arrange(Year) %>%
+  mutate(pct_change = ((Students/lag(Students))-1) * 100) %>%
+  na.omit()
+
+sport %>%
+  pivot_longer(cols = c(Boys,Girls)) %>%
+  filter(Sport != "Baseball" | name != "Girls",
+         Sport != "Football" | name != "Girls") %>%
+  group_by(Sport, name) %>%
+  arrange(Year, .by_group = TRUE) %>%
+  mutate(pct_change = (value/lag(value) - 1) * 100) %>%
+  ggplot() +
+  geom_smooth(aes(x=Year,y = pct_change,color = Sport),size = 2, se = F) +
+  facet_wrap(~name) +
+  geom_hline(yintercept = 0,linetype = "dashed",color = "red")+
+  labs(title = "Percent Change in High School Athletes by Sport",
+       y = "% Change",
+       caption = "Data provided by NFHS") +
+  theme_minimal() +
+  scale_color_manual(values = wes_palette(name = "Moonrise2")) +
+  theme(legend.position = "bottom")+
+  theme(plot.title = element_text(face = "bold",size = 18,hjust = .5)) 
+```
+
+### Hypothesis 1  
+  
+The first hypothesis is that participation levels will be different by sport.  
+ 
+  As shwon in the graph above, the only sport that showed a constant increase in sport particiaption was soccer. Football shows a negative trend, where the number of athletes participating is decreasing year over year. This helps support the hypothesis that the participation change is different by sport. This leads us to question which charactersitics are common among sports with declining participation versus increasing particpation.  
+  
+
+  
+```{r Cost to Play Mason Kellett, echo=FALSE, message=FALSE, warning=FALSE}
+ 
+cost <- cost %>%
+  mutate(Price_Level = as_factor(if_else(Cost > 300, "Expensive","Inexpensive"))) %>%
+  select(Sport, Price_Level)
+
+sport %>%
+  left_join(cost, by = "Sport") %>%
+  pivot_longer(cols = c(Boys,Girls)) %>%
+  filter(Sport != "Baseball" | name != "Girls",
+         Sport != "Football" | name != "Girls") %>%
+  group_by(Price_Level, Year) %>%
+  summarise(value = sum(value)) %>%
+  ungroup() %>%
+  group_by(Price_Level) %>%
+  arrange(Year, .by_group = T) %>%
+  mutate(pct_change = ((value/lag(value))-1)*100) %>%
+  ggplot() +
+  geom_smooth(aes(x = Year, y = pct_change, color = Price_Level), size = 2,se = F) +
+  geom_hline(yintercept = 0,linetype = "dashed",color = "red")+
+  labs(title = "Percent Change in High School Athletes by Cost to Play",
+       subtitle = "Compared to Percent Change in Overall High School Students (Black)",
+       y = "% Change",
+       color = "Price Level",
+       caption = "Data provided by NFHS and MetroKids") +
+  theme_minimal() +
+  scale_color_manual(values = wes_palette(name = "Moonrise2")) +
+  theme(legend.position = "bottom")+
+  theme(plot.title = element_text(face = "bold",size = 16,hjust = .5)) +
+  geom_smooth(data = enroll_pct_change, aes(x = Year, y = pct_change), size = 2, se = F, color = "black") +
+  xlim(c(2011,2018))
+```
+
+### Hypothesis 2  
+
+ More expensive sports will show a more consistent decline in sport participation. 
+
+  Sports were split into two factors, expensive or inexpensive, depending on the sports average annual cost according to a MetroKids report. Based on this seperation, it was shown that the more expensive sport strayed significantly from the overall trendline for change in student population. The less expensive sports, even in 2018, followed pretty closely with the changes in student population. This leads to the conclusion that students are participating less frequently in sports that are consistently more expensive, which demonstrates how cost is a huge indicator of the decreasing sport participation. 
+
