@@ -10,22 +10,41 @@ editor_options:
 # Outline
 
   1. Discuss Hypothesis
-    - Participation in sports is decreasing due to sports-related injuries
+  
+    + Participation in sports is decreasing due to sports-related injuries
+    
   2. Injuries
-    - How many kids are getting hurt?
+  
+    + How many kids are getting hurt?
+    
       + Youth Emergency Visits for Brain Injuries (Bar chart)
-    - What are the demographics of the people getting hurt?
+      
+    + What are the demographics of the people getting hurt?
+    
       + Number of Concussions by Gender (Paired bar chart)
-    - What sports have the most injuries?
+      
+    + What sports have the most injuries?
+    
       + Boxplots of mean median modes by sport
-    - How have injuries rates changed over time?
+      
+    + How have injuries rates changed over time?
+    
       + Line Charts by Sport
+      
   3. Participation
-    - Who participates in sports?
+  
+    + Who participates in sports?
+    
       + Choropleth map of participation
+      
       + Bar chart of participation by gender
-    - How many people participate in sports?
+      
+    + How many people participate in sports?
+    
       + Line graph of participation by sport
+      
   4. Conclusion
-    - Viz comparing injuries by participation over time
-    - Survey Responses on The Long-Term Effects of Concussions in Sport (Stacked Bar chart)
+  
+    + Viz comparing injuries by participation over time
+    
+    + Survey Responses on The Long-Term Effects of Concussions in Sport (Stacked Bar chart)
