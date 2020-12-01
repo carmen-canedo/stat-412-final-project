@@ -545,14 +545,12 @@ stacked_survey <- long_percentage %>%
 stacked_survey
 ```
 
-<<<<<<< HEAD
 Lastly, I felt that one of the best ways to get an idea of how the public views sports-related brain injuries in general was to look at a public opinion poll. This survey was conducted by Harris Interactive and it asked its participants to rate to what extent they agree or disagree with 5 statements.
 
 Some of the main takeaways from this graph are that:
 
   + A quarter of respondents did not believe in setting a minimum amount of time to recover from brain injuries - instead they felt that helmets and protective gear should be modified to better protect athletes.
   + Additionally, nearly a quarter of respondents felt that risk of injury in football is widely known. So perhaps there is a consensus that the sport itself isn’t going to change, but it is the responsibility of athletes to decide whether or not they will put themselves at risk. This statement in particular really stood out to me as tying back to my hypothesis that risk negatively affects participation.
-=======
 
 # The Impact of Academics on Sports Participation
 # Joseph Bernardi
@@ -716,5 +714,3 @@ ggplot(data=employment.vs.sports, aes(x=Year, y=pct.partic, group=1)) +
   Here, we can observe that there is a noticeable positive trend in the data, inferring there to be a positive relationship between sports participation and youth employment. This defies our expectation from our hypothesis, that an increase workload would explain less involvement in sports. However, it seems like this is the exact opposite. This may have an economic factor to it, in that when the economy is doing well, students' families will be able to do better financially and afford fees for extracurricular activities for their children and not need them to necessarily get a job.
   
   To conclude, it is apparent that this section of our hypothesis has been proven to be incorrect, as SAT data shows a constant trend, while youth employment portrays the opposite of our expectations.
-
->>>>>>> 8340a882e465827272f851273f0efda905a2ddb4
