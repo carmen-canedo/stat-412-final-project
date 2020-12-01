@@ -2,8 +2,8 @@
 title: "High School Participation in Athletics"
 author: "Mason Kellett, Carmen Canedo, Joseph Bernardi, David Leshchiner"
 output:
-  word_document: default
   pdf_document: default
+  word_document: default
   html_notebook: default
 ---
 

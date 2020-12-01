@@ -1,0 +1,109 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+```{r}
+source("scriptDavid.R")
+```
+
+```{r}
+gbsoccer <- read_excel("data/partcipation_statistics_12_01_202009_22.xlsx")
+```
+
+```{r}
+gbsoccer1 <- gbsoccer %>%
+  group_by(Year) %>%
+  summarise(Boys_School = sum(`Boys School`),
+            Girls_School = sum(`Girls School`)) %>%
+  mutate(Boys_change = (Boys_School/lag(Boys_School) - 1) * 100) %>%
+  mutate(Girls_change = (Girls_School/lag(Girls_School) - 1) * 100) %>%
+  na.omit()
+         
+
+head(gbsoccer1, 5)
+
+gbsoccer1a <- gbsoccer1 %>%
+  mutate(Girls_School = (Girls_School/1000))
+```
+```{r}
+gbsoccer1 %>%
+  kbl(caption = "US High Schools with Soccer Programs") %>%
+  kable_classic(position = "center") 
+```
+
+```{r}
+ggplot(gbsoccer1) +
+  geom_col(aes(x = Year, y = Girls_change), fill = "#F2312E") +
+  guides(fill = FALSE) +
+  geom_line(aes(x = Year, y = Girls_change, group = 1), color= "#037EFC", size = 1.5) +
+    theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1))) + 
+  labs(title = "Annual Change in Schools offering Girls Soccer Programs", x = "Season", y = "Percent Change")
+
+ggplot(gbsoccer1) +
+  geom_line(aes(x = Year, y = Girls_School, group = 1), color = "orange", size = 2) +
+  theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1)))+ 
+  labs(title = "Amount of HS Girls in Soccer Programs", x = "Season", y = "Amount of Girls")
+```
+
+```{r}
+ggplot(gbsoccer1a) +
+  geom_col(aes(x = Year, y = Girls_change), fill = "#F2312E") +
+  guides(fill=FALSE) +
+  geom_line(aes(x = Year, y = Girls_change, group = 1), color= "#037EFC", size = 1.5) +
+    theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1))) + 
+  labs(title = "Annual Change in Schools offering Girls Soccer Programs", x = "Season", y = "Percent Change") +
+  geom_line(aes(x = Year, y = Girls_School, group = 1), color = "orange", size = 1.5) +
+    scale_y_continuous(sec.axis = sec_axis(~./3, name = "Amount of Girls (in thousands)"))
+```
+
+```{r}
+ggplot(gbsoccer1) +
+  geom_col(aes(x = Year, y = Boys_change), fill = "#037EFC") +
+  guides(fill = FALSE) +
+  geom_line(aes(x = Year, y = Boys_change, group = 1), color= "#F2312E", size= 1.5) +
+    theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1))) 
+
+ggplot(gbsoccer1) +
+  geom_col(aes(x = Year, y = Boys_change), fill = "#037EFC") +
+  guides(fill = FALSE) +
+  ylim(0, 5) +
+  xlim("2003/2004", "2004/2005", "2005/2006", 
+       "2006/2007","2007/2008", "2008/2009", "2009/2010", "2010/2011", "2011/2012", "2012/2013", "2013/2014", 
+      "2014/2015","2015/2016", "2016/2017", "2017/2018") +
+  geom_line(aes(x = Year, y = Boys_change, group = 1), color= "#F2312E", size= 1.5) +
+    theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1))) 
+
+
+ggplot(gbsoccer1) +
+  geom_line(aes(x = Year, y = Boys_School, group = 1), color = "yellow", size = 2) +
+  theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1)))+ 
+  labs(title = "Amount of HS Boys in Soccer Programs", x = "Season", y = "Amount of Boys")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
