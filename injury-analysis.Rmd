@@ -15,6 +15,9 @@ library(tidyverse)
 library(likert)
 ```
 
+# Hypothesis
+The third hypothesis we are looking predicts that sports with high instances of injury will also have steady declines in participation.
+
 # Data
 The data used are as follows:
 
@@ -29,7 +32,10 @@ The data used are as follows:
   + High School Participation Archive
   + Program for Injury Prevention, Education, & Research
 
-# Bar Graph: Youth emergency visits for brain injuries
+# Injuries
+
+## How many kids are getting hurt?
+Bar Graph: Youth emergency visits for brain injuries
 ```{r}
 # Getting rid of total counts
 youth_ed_tbi_visits <- youth_ed_tbi_visits %>% 
@@ -52,14 +58,8 @@ youth_ed_tbi_visits %>%
        y = "Count")
 ```
 
-
-# Histogram
-Decided not to do
-
-# Count
-Decided not to do
-
-# Bar Graph: Number of concussions by gender
+## What demographics are most affected?
+Bar Graph: Number of concussions by gender
 ```{r}
 num_concussions_2017 <- num_concussions_2017 %>% 
   pivot_longer(cols = c(male, female)) %>% 
@@ -81,7 +81,24 @@ Among High School Students",
   theme_minimal()
 ```
 
-# Stacked Bar Graph
+## What sports have the most injuries?
+Boxplots
+
+## How have injuries rates changed over time?
+Line charts by sport
+
+
+# Participation
+## Who participates in sports?
+Choropleth map of participation
+Bar chart of participation by gender
+
+## How many people participate in sports?
+Line graph of sports
+
+# Conclusion
+## Injuries and participation over time
+## Stacked Bar Graph: Public opinion
 ```{r}
 text_statements <- c("Players who suffer a head injury should be required to take a minimum set amount of time off from playing to recover.",
                      "Helmets should be changed to better protect against concussions.",
