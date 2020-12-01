@@ -23,7 +23,7 @@ library(ggthemes)
 participationdata <- read.csv("participation_data.csv")
 
 # Condense data to get total sports participation for each state, for the 2018/2019 school year
-participationdata <- participationdata %>%
+participationdata2 <- participationdata %>%
   subset(year = "2018/2019") %>%
   select(state, boys_participation, girls_participation) %>%
   group_by(state) %>%
@@ -38,7 +38,7 @@ statepopdata <- statepopdata %>%
   subset(X1950 == 2019) %>%
   select(state, Population)
 
-percap.participation <- participationdata %>%
+percap.participation <- participationdata2 %>%
   inner_join(statepopdata, by = "state") %>%
   group_by(state) %>%
   summarise(boys.participation.percapita = state.boys_partic / Population, girls.participation.percapita = state.girls_partic / Population, total.participation.percapita = (state.boys_partic + state.girls_partic) / Population, Population) %>%
@@ -113,4 +113,43 @@ Sports.vs.SAT %>%
   
   In summary, the data distinctly portrays that there is no correlation between SAT enrollment/scores and participation in sports.
   
+  Although our initial hypothesis has seemed to be refuted, let us expand a little bit on this concept of work. Lots of students work jobs after school, would this be more detrimental to sports participation?
+  
+```{r echo=FALSE}
 
+employmentdata <- read.csv("employment_data.csv")
+
+participationdata3 <- participationdata
+
+participationdata3$year <- gsub("^.{0,5}", "", participationdata3$year)
+
+participationdata3$year <- as.integer(as.character(participationdata3$year))
+
+employment.vs.sports <- participationdata3 %>%
+  rename(Year = year) %>%
+  select(Year, boys_participation, girls_participation) %>%
+  group_by(Year) %>%
+  summarise(state.boys_partic = sum(boys_participation), state.girls_partic = sum(girls_participation), total.partic = state.boys_partic + state.girls_partic) %>%
+  inner_join(employmentdata, by = "Year") %>%
+  drop_na()
+
+
+  
+employment.vs.sports <- employment.vs.sports %>%
+  subset(Year > 2010) %>%
+  arrange(Year) %>%
+  mutate(pct.emp = (percent_employment - lag(percent_employment))/lag(percent_employment)*100) %>%
+  mutate(pct.partic = (total.partic - lag(total.partic))/lag(total.partic)*100) %>%
+  mutate(pct.boys = (state.boys_partic - lag(state.boys_partic))/lag(state.boys_partic)*100) %>%
+  mutate(pct.girls = (state.girls_partic - lag(state.girls_partic))/lag(state.girls_partic)*100)
+  
+
+ggplot(data=employment.vs.sports, aes(x=Year, y=pct.partic, group=1)) +
+  geom_line(aes(y = pct.boys, color = "blue")) + geom_line(aes(y = pct.girls, color = "red")) + geom_line(aes(y = pct.emp, color = "green")) + geom_line(aes(y = pct.partic, color = "purple")) + ylab("Percent Change") + ggtitle("Percent Change of Youth Employment and Sports Participation\n in Boys and Girls") + scale_color_discrete(name = "Type", labels = c("% Change in\n Girls Sports\n Participation", "% Change in\n High School\n Aged Employment", "% Change in\n Boys Sports\n Participation", "% Change in\n Total Sports\n Participation")) + theme_pander() +  theme(legend.position="bottom")
+  
+
+```
+
+  Here, we can observe that there is a noticeable positive trend in the data, inferring there to be a positive relationship between sports participation and youth employment. This defies our expectation from our hypothesis, that an increase workload would explain less involvement in sports. However, it seems like this is the exact opposite. This may have an economic factor to it, in that when the economy is doing well, students' families will be able to do better financially and afford fees for extracurricular activities for their children and not need them to necessarily get a job.
+  
+  To conclude, it is apparent that this section of our hypothesis has been proven to be incorrect, as SAT data shows a constant trend, while youth employment portrays the opposite of our expecations.
