@@ -15,7 +15,7 @@ library(tidyverse)
 library(likert)
 ```
 
-# Reading in data
+# Data
 The data used are as follows:
 
   + Youth emergency visits among US children for sports-related brain injuries from 2010-2016
@@ -26,10 +26,8 @@ The data used are as follows:
   + Average annual number of US college female sports injuries during the fall season from 2009 to 2014
   + Average annual number of US college male sports injuries during the fall season from 2009 to 2014
   + Average annual number of US college for all seasons from 2009 to 2014 by gender
-  
-```{r}
-
-```
+  + High School Participation Archive
+  + Program for Injury Prevention, Education, & Research
 
 # Bar Graph: Youth emergency visits for brain injuries
 ```{r}

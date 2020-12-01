@@ -112,4 +112,8 @@ sport %>%
  More expensive sports will show a more consistent decline in sport participation. 
 
   Sports were split into two factors, expensive or inexpensive, depending on the sports average annual cost according to a MetroKids report. Based on this seperation, it was shown that the more expensive sport strayed significantly from the overall trendline for change in student population. The less expensive sports, even in 2018, followed pretty closely with the changes in student population. This leads to the conclusion that students are participating less frequently in sports that are consistently more expensive, which demonstrates how cost is a huge indicator of the decreasing sport participation. 
+  
+### Hypothesis 3
+
+Sports with higher rates of injury will show a decline in participation.
 
