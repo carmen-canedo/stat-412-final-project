@@ -7,14 +7,17 @@ output:
   html_document: default
 ---
 
+# The Impact of Academics on Sports Participation
+# Joseph Bernardi
+
   An essential part of our hypothesis is that an increased amount of focus on academics will lower the participation in sports, as students will have less time to devote to sports.
 
   Initially, I tested AP enrollment against the participation in high school sports, but found no significant correlation. I concluded that this may be due to other variables such as the differing availability of AP programs at school. Therefore, I began to analyze the relationship between SAT enrollment (per capita) and average score, as well as boys and girls sports participation (per capita).
 
 
-### SAT Enrollment
+### SAT Enrollment and Average Score
 
-```{r echo=FALSE}
+```{r State Sports Participation Data (Joseph Bernardi), echo=FALSE, message=FALSE, warning=FALSE}
 
 library(tidyverse)
 library(ggplot2)
@@ -48,6 +51,7 @@ percap.participation <- participationdata2 %>%
 ggplot(data=percap.participation, aes(x=state, y=`Per Capita Participation`, fill=Gender)) +
 geom_bar(stat="identity", width = 0.8, position=position_dodge(width = 0.8)) + theme(axis.text=element_text(size=7, angle=45), legend.position="bottom") + scale_fill_discrete(name = "Gender", labels = c("Boys Participation", "Girls Participation")) + ggtitle("Sports Participation(Per Capita) by State and Gender in 2019")
 
+# Plot for participation by state
 ggplot(data=percap.participation, aes(x=state, y=total.participation.percapita)) + theme_calc() + geom_bar(stat="identity", width = 0.6, fill = "dark green") + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation (Per Capita) by State in 2019")
 
 ```
@@ -56,10 +60,12 @@ ggplot(data=percap.participation, aes(x=state, y=total.participation.percapita))
 Here we can observe that different states have varying levels of participation when adjusting for population size. In general, boys tend to participate in sports more than girls. Iowa and Nebraska are among the highest for per capita participation. We can also observe similar trends when comparing total participation between states.
 
 
-```{r echo=FALSE}
+```{r SAT Data by State (Joseph Bernardi), echo=FALSE, message=FALSE, warning=FALSE}
 
+# Load SAT data
 SAT_data <- read.csv("SAT_data.csv")
 
+# Create a dataframe that includes metrics in a per capita sense
 Sports.vs.SAT <- percap.participation %>%
   inner_join(SAT_data, by = "state") %>%
   select(state, total.participation.percapita, tooktest, avg_score, Population) %>%
@@ -67,9 +73,11 @@ Sports.vs.SAT <- percap.participation %>%
   group_by(state) %>%
   summarise(tooktest.percapita = tooktest / Population, total.participation.percapita, avg_score, tooktest, Population)
 
+# Plot for SAT Enrollment per capita
 ggplot(data=Sports.vs.SAT, aes(x=state, y=tooktest.percapita)) + theme_stata() +
   geom_bar(stat="identity", width = 0.6, fill = "orange") + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("SAT Enrollment (Per Capita) by State in 2019")
 
+# Plot for SAT avg score per capita
 ggplot(data=Sports.vs.SAT, aes(x=state, y=avg_score)) + theme_stata() +
   geom_bar(stat="identity", width = 0.6, fill = "light blue") + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("SAT Average Total Score by State in 2019")
 
@@ -77,12 +85,14 @@ ggplot(data=Sports.vs.SAT, aes(x=state, y=avg_score)) + theme_stata() +
 
 Here, for reference, we can observe the SAT enrollment per capita and average SAT score for each state in 2019.
 
+### Comparing Sports Participation with SAT Enrollment and Average Score
 
-```{r echo=FALSE}
+```{r Comparing SAT and Sports Data (Joseph Bernardi), echo=FALSE, message=FALSE, warning=FALSE}
+
+# Plots for comparing SAT Enrollment with sports data 
 Sports.vs.SAT %>%
   ggplot(aes(x = reorder(state, total.participation.percapita), y = tooktest.percapita)) + theme_calc() + geom_bar(stat="identity", width = 0.6, fill = "dark red") + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation VS SAT Enrollment") + xlab("States from Least to Greatest in Sports Participation Per Capita") + ylab("SAT Enrollment Per Capita")
 
-  
 Sports.vs.SAT %>%
   ggplot(aes(x = total.participation.percapita, y = tooktest.percapita, group = 1)) + theme_calc() + geom_line(stat="identity", width = 0.6, color = "dark red") + geom_point() + geom_text(aes(label=state), size = 3, hjust=-0.3, vjust=0) + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation VS SAT Enrollment") + xlab("Sports Participation Per Capita") + ylab("SAT Enrollment Per Capita")
 
@@ -94,8 +104,9 @@ Sports.vs.SAT %>%
   
   After examining both of these visualizations, it is apparent that there is no visible correlation between sports participation and SAT enrollment, as the data points are flat, and do not entail a positive or negative correlation.
   
-```{r echo=FALSE}
+```{r Comparing SAT and Sports Data Pt.2 (Joseph Bernardi), echo=FALSE, message=FALSE, warning=FALSE}
 
+# Plots for comparing SAT Score with sports data 
 Sports.vs.SAT %>%
   group_by(state) %>%
   summarise(sport.score_ratio = total.participation.percapita / avg_score, Population, total.participation.percapita, avg_score) %>%
@@ -113,18 +124,23 @@ Sports.vs.SAT %>%
   
   In summary, the data distinctly portrays that there is no correlation between SAT enrollment/scores and participation in sports.
   
+  
+### Comparing Sports Participation and Youth Employment in High School
+
   Although our initial hypothesis has seemed to be refuted, let us expand a little bit on this concept of work. Lots of students work jobs after school, would this be more detrimental to sports participation?
   
-```{r echo=FALSE}
+```{r Comparing Sports Participation and Youth Employment (Joseph Bernardi), echo=FALSE, message=FALSE, warning=FALSE}
 
 employmentdata <- read.csv("employment_data.csv")
 
 participationdata3 <- participationdata
 
+# Take Year from school year
 participationdata3$year <- gsub("^.{0,5}", "", participationdata3$year)
 
 participationdata3$year <- as.integer(as.character(participationdata3$year))
 
+# Group employment and sports by Year
 employment.vs.sports <- participationdata3 %>%
   rename(Year = year) %>%
   select(Year, boys_participation, girls_participation) %>%
@@ -134,7 +150,7 @@ employment.vs.sports <- participationdata3 %>%
   drop_na()
 
 
-  
+# Shift data to percent change format
 employment.vs.sports <- employment.vs.sports %>%
   subset(Year > 2010) %>%
   arrange(Year) %>%
@@ -143,7 +159,7 @@ employment.vs.sports <- employment.vs.sports %>%
   mutate(pct.boys = (state.boys_partic - lag(state.boys_partic))/lag(state.boys_partic)*100) %>%
   mutate(pct.girls = (state.girls_partic - lag(state.girls_partic))/lag(state.girls_partic)*100)
   
-
+# Plot percent change data
 ggplot(data=employment.vs.sports, aes(x=Year, y=pct.partic, group=1)) +
   geom_line(aes(y = pct.boys, color = "blue")) + geom_line(aes(y = pct.girls, color = "red")) + geom_line(aes(y = pct.emp, color = "green")) + geom_line(aes(y = pct.partic, color = "purple")) + ylab("Percent Change") + ggtitle("Percent Change of Youth Employment and Sports Participation\n in Boys and Girls") + scale_color_discrete(name = "Type", labels = c("% Change in\n Girls Sports\n Participation", "% Change in\n High School\n Aged Employment", "% Change in\n Boys Sports\n Participation", "% Change in\n Total Sports\n Participation")) + theme_pander() +  theme(legend.position="bottom")
   
