@@ -1,6 +1,10 @@
 # Carmen Canedo
+# Knitting Preferences
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 # Script for loading in participation and injury data
 library(tidyverse)
+library(lubridate)
+library(stringi)
 
 # Loading in participation data
 all_boys_athletes_states <- read_csv("./data/injury-data/participation/all-boys-athletes-state.csv")
@@ -13,6 +17,8 @@ girls_programs_top10 <- read_csv("./data/injury-data/participation/girls-program
 girls_participation_top10 <- read_csv("./data/injury-data/participation/girls-top10-participation.csv")
 participation_count_1971_2019 <- read_csv("./data/injury-data/participation/participation-count-1971-2019.csv")
 sports_participation_states <- read_csv("./data/injury-data/participation/sports-part-by-state.csv")
+participation_by_gender_grade <- read_csv("./data/injury-data/RIO-individuals/2018-19/participation-by-gender-grade.csv")
+participation_by_sport_grade <- read_csv("./data/injury-data/RIO-individuals/2018-19/participation-by-grade-sport.csv")
 
 # Loading in extra injury data
 ## Original datasets
@@ -32,8 +38,6 @@ boys_soccer_details <- read_csv("./data/injury-data/RIO-individuals/2018-19/boys
 football_details <- read_csv("./data/injury-data/RIO-individuals/2018-19/football-details.csv")
 girls_basketball_details <- read_csv("./data/injury-data/RIO-individuals/2018-19/girls-basket-details.csv")
 girls_soccer_details <- read_csv("./data/injury-data/RIO-individuals/2018-19/girls-soccer-details.csv")
-participation_by_gender_grade <- read_csv("./data/injury-data/RIO-individuals/2018-19/participation-by-gender-grade.csv")
-participation_by_sport_grade <- read_csv("./data/injury-data/RIO-individuals/2018-19/participation-by-grade-sport.csv")
 softball_details <- read_csv("./data/injury-data/RIO-individuals/2018-19/softball-details.csv")
 volleyball_details <- read_csv("./data/injury-data/RIO-individuals/2018-19/volleyball-details.csv")
 
@@ -55,6 +59,28 @@ transform_data <- function(tbl) {
   
   return(new_tbl)
 }
+
+
+# Saving list of injury data frames by sport
+sports_injuries_type <- list(boys_basketball_details, boys_soccer_details, football_details, girls_basketball_details,
+                             girls_soccer_details, softball_details, volleyball_details)
+
+
+# List of sports names
+Sport <- c("Boy's Basketball", "Boy's Soccer", "Football", "Girl's Basketball", "Girl's Soccer", "Softball", "Volleyball")
+
+# Saving as tibble
+Sport <- tibble(Sport)
+
+
+# Function for narrowing down injuries
+combine_injury_totals <- function(tbl) {
+  
+  tbl <- tbl %>% 
+    filter(Activity == "Total")
+  
+}
+
 
 # Saving list of all dataframes
 # tbls <- list(youth_ed_tbi_visits, general_ed_visits, sport_ed_visits, num_concussions_2017, survey_tbi_effects, female_college_sports, male_college_sports, avg_college_sports,

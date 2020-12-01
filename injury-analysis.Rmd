@@ -10,9 +10,8 @@ editor_options:
 ---
 
 # Loading libraries
-```{r}
-library(tidyverse)
-library(likert)
+```{r, message=FALSE, warning=FALSE}
+source("setupCarmen.R")
 ```
 
 # Hypothesis
@@ -33,7 +32,6 @@ The data used are as follows:
   + Program for Injury Prevention, Education, & Research
 
 # Injuries
-
 ## How many kids are getting hurt?
 Bar Graph: Youth emergency visits for brain injuries
 ```{r}
@@ -82,10 +80,61 @@ Among High School Students",
 ```
 
 ## What sports have the most injuries?
-Boxplots
+### Boxplots of injuries by sports
+```{r}
+total_sport_injuries <- map_df(sports_injuries_type, combine_injury_totals)
+```
+
+```{r}
+total_sport_injuries <- Sport %>% 
+  bind_cols(total_sport_injuries) %>% 
+  select(-Activity) %>% 
+  pivot_longer(cols = -Sport, names_to = "Injury Type", values_to = "Count")
+```
+
+```{r}
+total_sport_injuries %>% 
+  ggplot(aes(x = Sport, y = Count)) +
+  geom_boxplot()
+```
+### Boxplot of injuries by type
+```{r}
+total_sport_injuries %>% 
+  ggplot(aes(x = `Injury Type`, y = Count)) +
+  geom_boxplot()
+```
 
 ## How have injuries rates changed over time?
-Line charts by sport
+### Line charts by sport nat' injury estimates
+```{r}
+national_time <- natl_injury_estimates %>% 
+  pivot_longer(cols = -X1, names_to = "Year", values_to = "Injury") %>% 
+  rename(Sport = X1) %>% 
+  filter(Sport != "Overall total")
+
+temp <- national_time %>% 
+  select(Year) %>% 
+  as_vector()
+  
+temp <- temp %>% 
+  str(pattern = "Year[[:digit]]$", replacement = "")
+  
+#str_replace_all(pattern = "[[:punct:]]\\d{2}$", replacement = "")
+
+temp[2]
+```
+
+```{r}
+national_time %>% 
+  ggplot(aes(x = Year, y = Injury, color = Sport)) +
+  geom_point()
+```
+
+
+### Scatterplot diagnosis by year, color by type
+```{r}
+
+```
 
 
 # Participation
