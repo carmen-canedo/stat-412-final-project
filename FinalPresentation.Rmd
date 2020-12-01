@@ -713,3 +713,196 @@ ggplot(data=employment.vs.sports, aes(x=Year, y=pct.partic, group=1)) +
   Here, we can observe that there is a noticeable positive trend in the data, inferring there to be a positive relationship between sports participation and youth employment. This defies our expectation from our hypothesis, that an increase workload would explain less involvement in sports. However, it seems like this is the exact opposite. This may have an economic factor to it, in that when the economy is doing well, students' families will be able to do better financially and afford fees for extracurricular activities for their children and not need them to necessarily get a job.
   
   To conclude, it is apparent that this section of our hypothesis has been proven to be incorrect, as SAT data shows a constant trend, while youth employment portrays the opposite of our expectations.
+
+
+# David Leshchiner Final Report for the group Project
+
+
+```{r}
+source("scriptDavid.R") #Script contains libraries and functions
+```
+
+### Data sourced from the National Federation of State High School Associations (NFHS)
+
+# Hypothesis One
+
+I firstly believe that there is a correlation between an increase in high schools offering soccer programs and participation in high school soccer that crosses gender divides
+
+# Hypothesis Two
+
+Secondly I believe that there are regional variations in the amount of school offerings of soccer programs, and this variation might be gendered
+
+## Manipulating the Data
+
+```{r}
+gbsoccer <- read_csv("data/partcipation_statistics_12_01_202009_22.csv")
+head(gbsoccer, 3)
+```
+
+```{r}
+gbsoccer1 <- gbsoccer %>% #Manipulating data to graph nationwide percent change by year
+  group_by(Year) %>%
+  summarise(Boys_School = sum(`Boys School`),
+            Girls_School = sum(`Girls School`)) %>%
+  mutate(Boys_change = (Boys_School/lag(Boys_School) - 1) * 100) %>%
+  mutate(Girls_change = (Girls_School/lag(Girls_School) - 1) * 100) %>%
+  na.omit()
+         
+
+head(gbsoccer1, 5)
+
+gbsoccer1a <- gbsoccer1 %>%
+  mutate(Girls_School = (Girls_School/1000))
+
+gbsoccer1b <- gbsoccer %>% #Manipulating data to graph nationwide participation change by year
+  group_by(Year) %>%
+  summarise(Boys_Participation = sum(`Boys Participation`),
+            Girls_Particpation = sum(`Girls Participation`)) 
+
+head(gbsoccer1b, 5)
+```
+```{r}
+gbsoccer1 %>%  #Formatted Data with KableExtra package
+  kbl(caption = "US High Schools with Soccer Programs") %>%
+  kable_classic(position = "center") 
+```
+## Graphing the Data
+
+```{r}
+ggplot(gbsoccer1) +     #Using ggplot to graph girls participation in high school soccer and the percentage change of schools offering the sport
+  geom_col(aes(x = Year, y = Girls_change), fill = "#F2312E") +
+  guides(fill = FALSE) +
+  geom_line(aes(x = Year, y = Girls_change, group = 1), color= "#037EFC", size = 1.5) +
+    theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1))) + 
+  labs(title = "Annual Change in Schools offering Girls Soccer Programs", x = "Season", y = "Percent Change")
+
+ggplot(gbsoccer1b) +
+  geom_line(aes(x = Year, y = Girls_Particpation, group = 1), color = "orange", size = 2) +
+  theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1)))+ 
+  labs(title = "Amount of HS Girls in Soccer Programs", x = "Season", y = "Amount of Girls")
+```
+
+From the data it is visible that there is some correlation between an increase in high schools offering soccer programs for girls and an increase in participation for girls in high school soccer. The data is positively correlated, and there are instances of correlation from interval to interval as is the case from 2006/07 or 2008/09 or 2009/10 when there were similar increases and decreases in both graphs.
+
+
+```{r}
+ggplot(gbsoccer1) +   #Graphs similar to girls in terms of code
+  geom_col(aes(x = Year, y = Boys_change), fill = "#037EFC") +
+  guides(fill = FALSE) +
+  geom_line(aes(x = Year, y = Boys_change, group = 1), color= "#F2312E", size= 1.5) +
+    theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1))) +
+  labs(title = "Annual Change in Schools offering Boys Soccer Programs", x = "Season", y = "Percent Change", subtitle = "With Outlier")
+
+ggplot(gbsoccer1) +
+  geom_col(aes(x = Year, y = Boys_change), fill = "#037EFC") +
+  guides(fill = FALSE) +
+  ylim(0, 5) +
+  xlim("2003/2004", "2004/2005", "2005/2006", 
+       "2006/2007","2007/2008", "2008/2009", "2009/2010", "2010/2011", "2011/2012", "2012/2013", "2013/2014", 
+      "2014/2015","2015/2016", "2016/2017", "2017/2018") +     #Might have been able to use stringr but this works as well
+  geom_line(aes(x = Year, y = Boys_change, group = 1), color= "#F2312E", size= 1.5) +
+    theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1))) +
+  labs(title = "Annual Change in Schools offering Boys Soccer Programs", x = "Season", y = "Percent Change", subtitle = "Without Outlier")
+
+
+ggplot(gbsoccer1b) +
+  geom_line(aes(x = Year, y = Boys_Participation, group = 1), color = "yellow", size = 2) +
+  theme(axis.text.x = element_text(angle = 45, vjust = (1.1), hjust = (1.1))) + 
+  labs(title = "Amount of HS Boys in Soccer Programs", x = "Season", y = "Amount of Boys")
+```
+
+From the data it is visible that there is some correlation between an increase in high schools offering soccer programs for boys and an increase in participation for boys in high school soccer. The data is positively correlated, and there are instances of correlation from interval to interval as is the case from 2006/07 or 2008/09 or 2009/10 when there were similar increases and decreases in both graphs. There are two graphs because 2018/19 is an outlier which hampers the visualization of the other data points. The first graph includes it and shows how large it is. The outlier might be an error or due to a change in methodology, or there could have been a massive increase in soccer programs offered to boys. However, there wasn't a large increase in boys soccer participation afterword, so much analysis is required. 
+
+## Part Two: Manipulating More Data
+
+```{r}
+RegionState <- str_c(gbsoccer$State, state.region, sep = "_", collapse = NULL) #Used stringr to combine the state character string from the dataset and the state.region character string found pre-installed in R
+```
+
+```{r}
+RegionState2 <- str_split_fixed(RegionState, "_", 2)  
+gbsoccerPLOT <- gbsoccer %>%
+  cbind(RegionState2) %>%
+  select(Year, `Boys School`, `Girls School`, `Girls Participation`, `Boys Participation`, `2`) %>%
+  rename("Region" = `2`)
+gbsoccerPLOT <- as.data.frame(unclass(gbsoccerPLOT))
+gbsoccerPLOT
+```
+
+## Graphing the data
+
+```{r}
+MakeBoysRegionPlot("West") #Used function to make the next eight plots
+MakeBoysRegionPlot("South")
+MakeBoysRegionPlot("Northeast")
+MakeBoysRegionPlot("North Central")
+```
+
+```{r}
+MakeGirlsRegionPlot("West")
+MakeGirlsRegionPlot("South")
+MakeGirlsRegionPlot("Northeast")
+MakeGirlsRegionPlot("North Central")
+```
+
+
+```{r}
+gbsoccerPLOT1 <- gbsoccerPLOT %>% #Manipulating data to graph region wide percent change by year for school offerings of soccer
+  group_by(Region, Year) %>%
+  summarise(Boys_School = sum(Boys.School),
+            Girls_School = sum(Girls.School)) %>%
+  mutate(Boys_change = (Boys_School/lag(Boys_School) - 1) * 100) %>%
+  mutate(Girls_change = (Girls_School/lag(Girls_School) - 1) * 100) %>%
+  na.omit()
+
+gbsoccerPLOT1$Year = as.Date(as.character(gbsoccerPLOT1$Year),"%Y")
+gbsoccerPLOT1$Year = year(gbsoccerPLOT1$Year)
+gbsoccerPLOT1
+```
+```{r}
+ggplot(gbsoccerPLOT1) +   #Used Facet grid to plot regional change in boys soccer program
+  geom_col(aes(x = Year, y = Boys_change, fill = Region)) +
+  guides(fill = FALSE) +
+  facet_wrap(vars(Region)) +
+  geom_smooth(aes(x = Year, y = Boys_change, group = Region), color= "#F2312E", size= 1, se = F) +
+  labs(title = "Annual Regional Change in Schools offering Boys Soccer Programs", x = "Season", y = "Percent Change")
+```
+
+```{r}
+ggplot(gbsoccerPLOT1) +   #Used Facet grid to plot regional change in girls soccer program
+  geom_col(aes(x = Year, y = Girls_change, fill = Region)) +
+  guides(fill = FALSE) +
+  facet_wrap(vars(Region)) +
+  geom_smooth(aes(x = Year, y = Girls_change, group = Region), color= "#F2312E", size= 1, se = F) +
+  labs(title = "Annual Regional Change in Schools offering Girls Soccer Programs", x = "Season", y = "Percent Change")
+```
+
+Both of these graphs demonstrate that the growth of the sport has large regional variation from season to season which ends up making the growth rate of each region somewhat similar with the exception of the West which is currently growing. Furthermore, the data shows that there is a correlation between the growth of girls and boys soccer programs which makes some common sense since a school wants to be gender inclusive. 
+
+```{r}
+gbsoccerPLOT1 %>% #Used Facet grid to plot regional change in boys soccer program but divided country into just two regions: The Coast and the interior
+  mutate(Region = fct_collapse(Region,
+                                Coast = c("Northeast", "West"),
+                                Interior = c("North Central", "South"))) %>% 
+  ggplot() + 
+  geom_col(aes(x = Year, y = Boys_change, fill = Region)) +
+  guides(fill = FALSE) +
+  facet_wrap(vars(Region)) +
+  geom_smooth(aes(x = Year, y = Boys_change, group = Region), color= "#F2312E", size= 1, se = F) +
+  labs(title = "Annual Regional Change in Schools offering Boys Soccer Programs", x = "Season", y = "Percent Change")
+```
+
+```{r}
+gbsoccerPLOT1 %>% #Used Facet grid to plot regional change in boys soccer program but divided country into just two regions: The Coast and the interior
+  mutate(Region = fct_collapse(Region,
+                                Coast = c("Northeast", "West"),
+                                Interior = c("North Central", "South"))) %>% 
+  ggplot() + 
+  geom_col(aes(x = Year, y = Girls_change, fill = Region)) +
+  guides(fill = FALSE) +
+  facet_wrap(vars(Region)) +
+  geom_smooth(aes(x = Year, y = Girls_change, group = Region), color= "#F2312E", size= 1, se = F) +
+  labs(title = "Annual Regional Change in Schools offering Girls Soccer Programs", x = "Season", y = "Percent Change")
+```
+
+The reduction of the US into just two regions was done because many commentators describe the US as having a coastal center and a rural interior which is an oversimplification but for the purposes of this exercise I used that belief to demonstrate that there is a slight increase in soccer programs being offered in the US Coast and less soccer programs being offered in the US interior. The graph is a bit wonky as it adds up negative and positive numbers to form strange columns but the regression line running through it takes them into account and shows the trend line. This trend is visible among boys and girls soccer programs
