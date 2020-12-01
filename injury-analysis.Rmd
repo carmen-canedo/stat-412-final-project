@@ -168,6 +168,7 @@ diagnosis_by_year <- diagnosis_by_year %>%
   rename(Percent = `...3`)
 ```
 
+
 ```{r}
 diagnosis_by_year %>% 
   ggplot(aes(x = Year, y = Percent, color = Diagnosis)) +
@@ -180,6 +181,21 @@ diagnosis_by_year %>%
 # Participation
 ## Who participates in sports?
 Choropleth map of participation
+```{r}
+usa_map <- map_data("state")
+
+baseball_data <- data.frame(Count = all_boys_athletes_states$Baseball,
+                            State = tolower(all_boys_athletes_states$State))
+
+
+
+baseball_data %>% 
+  ggplot(aes(fill = Count)) +
+  geom_map(aes(map_id = State), map = usa_map) +
+  expand_limits(x = usa_map$long, y = usa_map$lat)
+```
+
+
 Bar chart of participation by gender
 
 ## How many people participate in sports?
