@@ -1,3 +1,5 @@
+# Carmen Canedo
+# Script for loading in participation and injury data
 library(tidyverse)
 
 # Loading in participation data
