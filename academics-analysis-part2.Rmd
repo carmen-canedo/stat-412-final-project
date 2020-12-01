@@ -80,11 +80,11 @@ Here, for reference, we can observe the SAT enrollment per capita and average SA
 
 ```{r echo=FALSE}
 Sports.vs.SAT %>%
-  ggplot(aes(x = reorder(state, total.participation.percapita), y = tooktest.percapita)) + theme_calc() + geom_bar(stat="identity", width = 0.6, fill = "dark red") + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation VS SAT Enrollment") + xlab("States from Least to Greatest in Sports Participation Per Capita")
+  ggplot(aes(x = reorder(state, total.participation.percapita), y = tooktest.percapita)) + theme_calc() + geom_bar(stat="identity", width = 0.6, fill = "dark red") + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation VS SAT Enrollment") + xlab("States from Least to Greatest in Sports Participation Per Capita") + ylab("SAT Enrollment Per Capita")
 
   
 Sports.vs.SAT %>%
-  ggplot(aes(x = total.participation.percapita, y = tooktest.percapita, group = 1)) + theme_calc() + geom_line(stat="identity", width = 0.6, color = "dark red") + geom_point() + geom_text(aes(label=state), size = 3, hjust=-0.3, vjust=0) + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation VS SAT Enrollment") + xlab("Sports Participation Per Capita")
+  ggplot(aes(x = total.participation.percapita, y = tooktest.percapita, group = 1)) + theme_calc() + geom_line(stat="identity", width = 0.6, color = "dark red") + geom_point() + geom_text(aes(label=state), size = 3, hjust=-0.3, vjust=0) + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation VS SAT Enrollment") + xlab("Sports Participation Per Capita") + ylab("SAT Enrollment Per Capita")
 
 
 ```
