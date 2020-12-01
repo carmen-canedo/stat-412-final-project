@@ -6,6 +6,7 @@ output: pdf_document
 ---
 ```{r Setup Mason Kellett, message=FALSE, warning=FALSE, include=FALSE}
 source("setupMason.R")
+source("setupCarmen.R")
 ```
 ## Athlete Participation  
 ```{r Problem Setup Mason Kellett, echo=FALSE, message=FALSE, warning=FALSE}

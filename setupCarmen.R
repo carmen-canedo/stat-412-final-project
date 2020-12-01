@@ -57,6 +57,12 @@ time_loss <- read_csv("./data/injury-data/RIO-individuals/all-years/time-loss.cs
 sports_injuries_type <- list(boys_basketball_details, boys_soccer_details, football_details, girls_basketball_details,
                              girls_soccer_details, softball_details, volleyball_details)
 
+# List of sports names
+Sport <- c("Boy's Basketball", "Boy's Soccer", "Football", "Girl's Basketball", "Girl's Soccer", "Softball", "Volleyball")
+
+# Saving as tibble
+Sport <- tibble(Sport)
+
 
 # Function for narrowing down injuries
 combine_injury_totals <- function(tbl) {
