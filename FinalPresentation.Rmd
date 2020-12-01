@@ -1,10 +1,11 @@
 ---
 title: "FinalPresentation"
-author: "Mason Kellett"
+author: "Mason Kellett, Carmen Canedo"
+date: "December 1, 2020"
 output: pdf_document
 ---
 ```{r Setup Mason Kellett, message=FALSE, warning=FALSE, include=FALSE}
-source("setup.R")
+source("setupMason.R")
 ```
 ## Athlete Participation  
 ```{r Problem Setup Mason Kellett, echo=FALSE, message=FALSE, warning=FALSE}

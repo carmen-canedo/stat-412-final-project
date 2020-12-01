@@ -28,14 +28,7 @@ The data used are as follows:
   + Average annual number of US college for all seasons from 2009 to 2014 by gender
   
 ```{r}
-youth_ed_tbi_visits <- read_csv("data/injury-data/ed-visits-among-us-children-for-sports-related-brain-injury-2010-2016-by-sport.csv")
-general_ed_visits <- read_csv("data/injury-data/us-annual-average-emergency-department-visits-for-sports-injuries-2010-2016-by-age.csv")
-sport_ed_visits <- read_csv("data/injury-data/us-emergency-department-visits-ages-5-24-2010-2016-by-gender-and-activity.csv")
-num_concussions_2017 <- read_csv("data/injury-data/number-of-concussions-suffered-by-us-youth-that-played-sports-as-of-2017-by-gender.csv")
-survey_tbi_effects <- read_csv("data/injury-data/survey-on-concussions-suffered-in-sports-and-long-term-brain-damage---effects-2014.csv")
-female_college_sports <- read_csv("data/injury-data/annual-number-of-us-college-female-sports-injuries-during-fall-season-2009-2014.csv")
-male_college_sports <- read_csv("data/injury-data/average-number-of-male-sports-injuries-during-us-college-fall-season-2009-2014.csv")
-avg_college_sports <- read_csv("data/injury-data/annual-number-of-college-sports-injuries-in-the-us-by-gender-2009-2014.csv")
+
 ```
 
 # Bar Graph: Youth emergency visits for brain injuries
