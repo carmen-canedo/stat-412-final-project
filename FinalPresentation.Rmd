@@ -1,6 +1,6 @@
 ---
-title: "FinalPresentation"
-author: "Mason Kellett, Carmen Canedo"
+title: "Final Presentation"
+author: "Mason Kellett, Carmen Canedo, Joseph Bernardi, David Leshchiner"
 date: "December 1, 2020"
 output: pdf_document
 ---
@@ -71,7 +71,7 @@ sport %>%
   
 The first hypothesis is that participation levels will be different by sport.  
  
-  As shwon in the graph above, the only sport that showed a constant increase in sport particiaption was soccer. Football shows a negative trend, where the number of athletes participating is decreasing year over year. This helps support the hypothesis that the participation change is different by sport. This leads us to question which charactersitics are common among sports with declining participation versus increasing particpation.  
+  As shown in the graph above, the only sport that showed a constant increase in sport participation was soccer. Football shows a negative trend, where the number of athletes participating is decreasing year over year. This helps support the hypothesis that the participation change is different by sport. This leads us to question which characteristics are common among sports with declining participation versus increasing participation.  
   
 
   
@@ -118,14 +118,13 @@ sport %>%
 
 Sports with higher rates of injury will show a decline in participation.
 
-# Injuries
+# Injuries - Carmen Canedo
 
 The main questions I looked into dealt with the potential impact of injuries in high school sports participation. So, within our overall hypothesis, I developed a few more that are specific to injuries.
 
 My hypotheses were as follows:
 
   1. Contact sports will have a higher number of concussions than limited or no contact sports.
-For example, sports like football or soccer would be more likely to result in brain injury than sports like gymnastics.
   2. Gender may be a factor in the overall rate of injuries in high school athletes.
   3. The risk of injury negatively impacts participation in high school sports.
 
