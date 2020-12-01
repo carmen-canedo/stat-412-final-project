@@ -180,7 +180,7 @@ diagnosis_by_year %>%
 
 # Participation
 ## Who participates in sports?
-Choropleth map of participation
+# Boys participants map
 ```{r}
 usa_map <- map_data("state")
 
@@ -195,11 +195,133 @@ baseball_data %>%
   expand_limits(x = usa_map$long, y = usa_map$lat)
 ```
 
+```{r}
+boys_basket_data <- data.frame(Count = all_boys_athletes_states$Basketball,
+                            State = tolower(all_boys_athletes_states$State))
 
-Bar chart of participation by gender
+
+
+boys_basket_data %>% 
+  ggplot(aes(fill = Count)) +
+  geom_map(aes(map_id = State), map = usa_map) +
+  expand_limits(x = usa_map$long, y = usa_map$lat)
+```
+
+```{r}
+boys_participation_long <- all_boys_athletes_states %>% 
+  pivot_longer(cols = !State, names_to = "Sports", values_to = "Count")
+  
+boys_participation_long$State <- tolower(boys_participation_long$State)
+
+boys_participation_long %>% 
+  ggplot(aes(fill = Count)) +
+  geom_map(aes(map_id = State), map = usa_map) +
+  expand_limits(x = usa_map$long, y = usa_map$lat) +
+  facet_wrap( ~ Sports)
+```
+# Boys Programs Availability Map
+```{r}
+boys_programs_long <- all_boys_programs_states %>% 
+  pivot_longer(cols = !State, names_to = "Sports", values_to = "Count")
+  
+boys_programs_long$State <- tolower(boys_programs_long$State)
+
+boys_programs_long %>% 
+  ggplot(aes(fill = Count)) +
+  geom_map(aes(map_id = State), map = usa_map) +
+  expand_limits(x = usa_map$long, y = usa_map$lat) +
+  facet_wrap( ~ Sports)
+```
+
+# Girls Participants Map
+```{r}
+girls_participation_long <- girl_athletes_states %>% 
+  select(-starts_with("X"), -Football) %>% 
+  pivot_longer(cols = !State, names_to = "Sports", values_to = "Count")
+  
+girls_participation_long$State <- tolower(girls_participation_long$State)
+
+girls_participation_long %>% 
+  ggplot(aes(fill = Count)) +
+  geom_map(aes(map_id = State), map = usa_map) +
+  expand_limits(x = usa_map$long, y = usa_map$lat) +
+  facet_wrap( ~ Sports)
+```
+
+# Girls Progams Map
+```{r}
+girls_programs_long <- girl_programs_states %>% 
+  select(-starts_with("X"), -Football) %>% 
+  pivot_longer(cols = !State, names_to = "Sports", values_to = "Count")
+  
+girls_programs_long$State <- tolower(girls_programs_long$State)
+
+girls_programs_long %>% 
+  ggplot(aes(fill = Count)) +
+  geom_map(aes(map_id = State), map = usa_map) +
+  expand_limits(x = usa_map$long, y = usa_map$lat) +
+  facet_wrap( ~ Sports)
+```
+
 
 ## How many people participate in sports?
+**SHOWS INCREASE**
 Line graph of sports
+# ```{r}
+# national_time <- natl_injury_estimates %>% 
+#   pivot_longer(cols = -X1, names_to = "Year", values_to = "Injury") %>% 
+#   rename(Sport = X1) %>% 
+#   filter(Sport == "Overall total")
+# 
+# temp <- national_time$Year
+#   
+# temp <- temp %>% 
+#   str_replace_all(pattern = "[[:punct:]]\\d{2}$", replacement = "") %>% 
+#   as.integer()
+# 
+# national_time <- national_time %>% 
+#   select(-Year) %>% 
+#   bind_cols(temp) %>% 
+#   rename(Year = `...3`)
+# ```
+# 
+# ```{r}
+# national_time %>% 
+#   ggplot(aes(x = Year, y = Injury, color = Sport)) +
+#   geom_line()
+# ```
+# 
+# ```{r}
+# national_time %>% 
+#   filter(Injury > 444281) %>% 
+#   ggplot(aes(x = Year, y = Injury, color = Sport)) +
+#   geom_line()
+# ```
+# 
+# ```{r}
+# temp <- participation_count_1971_2019$Year
+#   
+# temp <- temp %>% 
+#   str_replace_all(pattern = "[[:punct:]]\\d{2}$", replacement = "") %>% 
+#   as.integer()
+# 
+# participation_recent <- participation_count_1971_2019 %>% 
+#   select(-Year) %>% 
+#   bind_cols(temp) %>% 
+#   rename(Year = `...4`)
+# 
+# participation_recent <- participation_recent %>% 
+#   filter(Year > 2004)
+# 
+# participation_recent
+# ```
+# 
+# ```{r}
+# participation_recent %>% 
+#   ggplot(aes(x = Year, y = `Girls Participants`)) +
+#   geom_line()
+# ```
+
 
 # Conclusion
 ## Injuries and participation over time
