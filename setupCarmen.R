@@ -15,6 +15,16 @@ participation_count_1971_2019 <- read_csv("./data/injury-data/participation/part
 sports_participation_states <- read_csv("./data/injury-data/participation/sports-part-by-state.csv")
 
 # Loading in extra injury data
+## Original datasets
+youth_ed_tbi_visits <- read_csv("data/injury-data/ed-visits-among-us-children-for-sports-related-brain-injury-2010-2016-by-sport.csv")
+general_ed_visits <- read_csv("data/injury-data/us-annual-average-emergency-department-visits-for-sports-injuries-2010-2016-by-age.csv")
+sport_ed_visits <- read_csv("data/injury-data/us-emergency-department-visits-ages-5-24-2010-2016-by-gender-and-activity.csv")
+num_concussions_2017 <- read_csv("data/injury-data/number-of-concussions-suffered-by-us-youth-that-played-sports-as-of-2017-by-gender.csv")
+survey_tbi_effects <- read_csv("data/injury-data/survey-on-concussions-suffered-in-sports-and-long-term-brain-damage---effects-2014.csv")
+female_college_sports <- read_csv("data/injury-data/annual-number-of-us-college-female-sports-injuries-during-fall-season-2009-2014.csv")
+male_college_sports <- read_csv("data/injury-data/average-number-of-male-sports-injuries-during-us-college-fall-season-2009-2014.csv")
+avg_college_sports <- read_csv("data/injury-data/annual-number-of-college-sports-injuries-in-the-us-by-gender-2009-2014.csv")
+
 ## 2018-2019 data
 injuries_by_sport_2018 <- read_csv("./data/injury-data/RIO-individuals/2018-19/2018-injuries-by-sport.csv")
 boys_basketball_details <- read_csv("./data/injury-data/RIO-individuals/2018-19/boys-basket-details.csv")
@@ -38,19 +48,20 @@ time_loss <- read_csv("./data/injury-data/RIO-individuals/all-years/time-loss.cs
 
 # Cleaning data
 transform_data <- function(tbl) {
+  
+  # Drop NA values
   new_tbl <- tbl %>%
-    drop_na() %>%
-    #select(-starts_with("x"))
-    rename_with(~ str_replace_all(.x,
-                                  pattern = " ", replacement = "_")) %>%
-    rowwise()
+    drop_na() 
+  
   return(new_tbl)
 }
 
-tbls <- list(all_boys_athletes_states, all_boys_programs_states, girl_athletes_states, girl_programs_states, boys_programs_top10, boys_participation_top10, 
-             girls_programs_top10, girls_participation_top10, participation_count_1971_2019, sports_participation_states, injuries_by_sport_2018,
-             boys_basketball_details, boys_soccer_details, football_details, girls_basketball_details, girls_soccer_details, participation_by_gender_grade,
-             participation_by_sport_grade, softball_details, volleyball_details, body_parts_by_year, diagnosis_by_year, injury_rates_by_sports_year,
-             most_common_injuries_all, natl_injury_estimates, natl_injury_estimates, surgery_stats, time_loss)
-
-map_df(tbls, transform_data)
+# Saving list of all dataframes
+# tbls <- list(youth_ed_tbi_visits, general_ed_visits, sport_ed_visits, num_concussions_2017, survey_tbi_effects, female_college_sports, male_college_sports, avg_college_sports,
+#              all_boys_athletes_states, all_boys_programs_states, girl_athletes_states, girl_programs_states, boys_programs_top10, boys_participation_top10, 
+#              girls_programs_top10, girls_participation_top10, participation_count_1971_2019, sports_participation_states, injuries_by_sport_2018,
+#              boys_basketball_details, boys_soccer_details, football_details, girls_basketball_details, girls_soccer_details, participation_by_gender_grade,
+#              participation_by_sport_grade, softball_details, volleyball_details, body_parts_by_year, diagnosis_by_year, injury_rates_by_sports_year,
+#              most_common_injuries_all, natl_injury_estimates, natl_injury_estimates, surgery_stats, time_loss)
+# 
+# map_df(tbls, transform_data)
