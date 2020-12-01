@@ -106,34 +106,74 @@ total_sport_injuries %>%
 
 ## How have injuries rates changed over time?
 ### Line charts by sport nat' injury estimates
+**Shows DECREASE in injuries**
 ```{r}
 national_time <- natl_injury_estimates %>% 
   pivot_longer(cols = -X1, names_to = "Year", values_to = "Injury") %>% 
   rename(Sport = X1) %>% 
   filter(Sport != "Overall total")
 
-temp <- national_time %>% 
-  select(Year) %>% 
-  as_vector()
+temp <- national_time$Year
   
 temp <- temp %>% 
-  str(pattern = "Year[[:digit]]$", replacement = "")
-  
-#str_replace_all(pattern = "[[:punct:]]\\d{2}$", replacement = "")
+  str_replace_all(pattern = "[[:punct:]]\\d{2}$", replacement = "") %>% 
+  as.integer()
 
-temp[2]
+national_time <- national_time %>% 
+  select(-Year) %>% 
+  bind_cols(temp) %>% 
+  rename(Year = `...3`)
 ```
 
 ```{r}
 national_time %>% 
   ggplot(aes(x = Year, y = Injury, color = Sport)) +
-  geom_point()
+  geom_line()
+```
+
+```{r}
+national_time %>% 
+  filter(Injury > 444281) %>% 
+  ggplot(aes(x = Year, y = Injury, color = Sport)) +
+  geom_line()
 ```
 
 
 ### Scatterplot diagnosis by year, color by type
 ```{r}
+diagnosis_by_year <- diagnosis_by_year %>% 
+  rename(Diagnosis = X1) %>% 
+  filter(Diagnosis != "Total") %>% 
+  pivot_longer(cols = !Diagnosis, names_to = "Year", values_to = "Percent")
+```
 
+```{r}
+temp_year <- diagnosis_by_year$Year
+
+temp_perc <- diagnosis_by_year$Percent
+  
+temp_year <- temp_year %>% 
+  str_replace_all(pattern = ",", replacement = "") %>% 
+  str_replace_all(pattern = "[[:punct:]]\\d{2}", replacement = "") %>% 
+  as.integer()
+
+temp_perc <- temp_perc %>% 
+  str_replace_all(pattern = "%", replacement = "") %>% 
+  as.numeric()
+
+diagnosis_by_year <- diagnosis_by_year %>% 
+  select(-Year, -Percent) %>% 
+  bind_cols(temp_year, temp_perc) %>% 
+  rename(Year = `...2`) %>% 
+  rename(Percent = `...3`)
+```
+
+```{r}
+diagnosis_by_year %>% 
+  ggplot(aes(x = Year, y = Percent, color = Diagnosis)) +
+  facet_wrap(~ Diagnosis) +
+  geom_point() +
+  geom_smooth()
 ```
 
 
