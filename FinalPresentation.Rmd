@@ -119,6 +119,17 @@ sport %>%
 Sports with higher rates of injury will show a decline in participation.
 
 # Injuries
+
+The main questions I looked into dealt with the potential impact of injuries in high school sports participation. So, within our overall hypothesis, I developed a few more that are specific to injuries.
+
+My hypotheses were as follows:
+
+  1. Contact sports will have a higher number of concussions than limited or no contact sports.
+For example, sports like football or soccer would be more likely to result in brain injury than sports like gymnastics.
+  2. Gender may be a factor in the overall rate of injuries in high school athletes.
+  3. The risk of injury negatively impacts participation in high school sports.
+
+
 ## How many kids are getting hurt?
 ```{r Youth TBI Carmen}
 # Getting rid of total counts
@@ -141,6 +152,10 @@ youth_ed_tbi_visits %>%
        x = "Sport",
        y = "Count")
 ```
+In order to test my hypothesis that contact sports will have a higher number of concussions, I used data from the CDC’s Morbidity and Mortality Report. As you can see, Football, Basketball, & Soccer make up the majority of youth emergency room visits. Non-contact sports, therefore, appear to be less likely to result in Sports-Related brain injuries.
+
+This suggests that there may be a correlation with participation and concussions, particularly with football.
+
 
 ## What demographics are most affected?
 ```{r Concussions by Gender Carmen}
@@ -164,6 +179,7 @@ Among High School Students",
        y = "Percent") +
   theme_minimal()
 ```
+Next, I compared the rates of concussions by gender. It is important to note that nearly 80% of US Youth did not get concussions from sports in 2017 when this survey was conducted. Of those that do, they are likely to only get one concussion, and it appears that males tend to have concussions slightly more often than females.
 
 ## What sports have the most injuries?
 ### Injuries by sport
@@ -202,6 +218,11 @@ total_injuries_boxplot +
   theme(axis.text.x = element_text(size = 7)) 
 ```
 
+This led me to narrow in my focus, so I looked at the variations in injuries by sport in 2018. One thing I thought was really interesting was that Girl’s Soccer had the second highest mean. From the previous graphs we looked at, boy’s sports tended to have a higher number of injuries, so I had expected boys' contact sports to have higher numbers overall.
+
+Football, though, clearly had the highest count of injuries. This could potentially contribute to public perception that contact sports like football are dangerous.
+
+
 ### Injuries by type
 ```{r Boxplot of Injuries by Type Carmen}
 # Vector of colors
@@ -221,6 +242,8 @@ injury_type_boxplot +
        subtitle = "Year 2018",
        caption = "Colorado School of Public Health: \n Program for Injury Prevention, Education & Research")
 ```
+
+Another variable of interest I looked at was the variation of injury type in 2018. It appears that sprains are the most common injury, followed by concussion.
 
 ## How have injuries rates changed over time?
 ### Diagnosis by year, color by type
@@ -277,6 +300,11 @@ diagnosis_time +
        caption = "Colorado School of Public Health: Program for Injury Prevention, Education & Research")
 ```
 
+The next aspect I analyzed is how injury diagnoses have changed over time. This data comes from the Colorado School of Public Health’s Program for Injury Prevention, Education & Research, and this study collected data on the main injury diagnoses high school students received from 2005-2018.
+
+Concussions were the only type of injury to see an increase over the course of those 13 years, and it nearly doubled. It is possible that this large increase in concussions has led to a decrease in contact sports.
+
+
 # Participation
 ## Who participates in sports?
 ```{r Map Data Carmen}
@@ -317,6 +345,12 @@ boys_participation_map +
   scale_fill_distiller(palette = "Greens", trans = "reverse")
 ```
 
+As I started wrapping up my analysis on injury, I began to look at sports participation by gender and by state for 2018. 
+
+Here, we can see the count of participants in 48 of the states, separated by sport. One of the most notable parts of this graph is that it appears the highest number of participants is for football in Texas. This was unexpected to me because of the data we have seen in the past few slides that football has a higher rate of injury.
+
+The next most popular sports appear to be basketball and soccer, both of which had the highest number of participants in Texas and California.
+
 
 ### Boys Programs Availability Map
 ```{r Boys Programs Carmen}
@@ -350,6 +384,10 @@ boys_programs_count +
         axis.ticks.y = element_blank()) +
   scale_fill_distiller(palette = "Purples", trans = "reverse")
 ```
+
+I next looked at the availability of sports programs by state for the same year. As you can see, there tends to be a slightly higher number of programs overall for basketball than for the other sports. 
+
+It is unclear whether sports with high rates of injuries have less programs available through school or travel teams, etc. There are several other factors that could play into the number of programs available like cost.
 
 
 ### Girls Participants Map
@@ -386,6 +424,7 @@ girls_participation_map +
   scale_fill_distiller(palette = "Greens", trans = "reverse")
 ```
 
+The highest number of female participants appears to be for volleyball. This sport had the lowest average injury in the box plots we saw earlier, and this potentially supports our hypothesis as well, as it has lower number of injuries and more participation.
 
 ### Girls Progams Map
 ```{r Girls Programs Carmen}
@@ -420,6 +459,8 @@ girls_programs_count +
         axis.ticks.y = element_blank()) +
   scale_fill_distiller(palette = "Purples", trans = "reverse")
 ```
+
+Here is the availability of sports programs for girls by state. It appears the states where the highest number of programs are also happen to be for volleyball. It is possible that schools and sports organizations are more likely to invest in sports programs that are less likely to lead to injury.
 
 # Conclusion
 ## Public opinion
@@ -504,3 +545,9 @@ stacked_survey <- long_percentage %>%
 stacked_survey
 ```
 
+Lastly, I felt that one of the best ways to get an idea of how the public views sports-related brain injuries in general was to look at a public opinion poll. This survey was conducted by Harris Interactive and it asked its participants to rate to what extent they agree or disagree with 5 statements.
+
+Some of the main takeaways from this graph are that:
+
+  + A quarter of respondents did not believe in setting a minimum amount of time to recover from brain injuries - instead they felt that helmets and protective gear should be modified to better protect athletes.
+  + Additionally, nearly a quarter of respondents felt that risk of injury in football is widely known. So perhaps there is a consensus that the sport itself isn’t going to change, but it is the responsibility of athletes to decide whether or not they will put themselves at risk. This statement in particular really stood out to me as tying back to my hypothesis that risk negatively affects participation.
