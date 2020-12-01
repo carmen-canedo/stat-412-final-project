@@ -93,50 +93,74 @@ total_sport_injuries <- Sport %>%
 ```
 
 ```{r}
-total_sport_injuries %>% 
-  ggplot(aes(x = Sport, y = Count)) +
-  geom_boxplot()
+sports_colors <- c("#91b86e", "#956eb8", "#b86e90", "#6eb895", "#b8816e", "#b6b86e", "#706eb8")
+
+total_injuries_boxplot <- total_sport_injuries %>% 
+  ggplot(aes(x = Sport, y = Count, fill = Sport)) +
+  geom_boxplot() +
+  scale_fill_manual(values = sports_colors) +
+  scale_y_continuous(breaks = seq(0, 175000, 25000)) +
+  theme_minimal()
 ```
+
+```{r}
+total_injuries_boxplot +
+  labs(title = "Variations in Amount of Injuries by Sport",
+       subtitle = "Year: 2018",
+       caption = "Colorado School of Public Health: \n Program for Injury Prevention, Education & Research") + 
+  theme(axis.text.x = element_text(size = 7)) 
+```
+
 ### Boxplot of injuries by type
 ```{r}
-total_sport_injuries %>% 
-  ggplot(aes(x = `Injury Type`, y = Count)) +
-  geom_boxplot()
+injury_colors <- c("#91b86e", "#956eb8", "#b86e90", "#6eb895", "#b8816e")
+
+injury_type_boxplot <- total_sport_injuries %>% 
+  ggplot(aes(x = `Injury Type`, y = Count, fill = `Injury Type`)) +
+  geom_boxplot() +
+  scale_fill_manual(values = injury_colors) +
+  scale_y_continuous(breaks = seq(0, 175000, 25000)) +
+  theme_minimal()
+
+injury_type_boxplot +
+  labs(title = "Variation in Most Common Injury Types",
+       subtitle = "Year 2018",
+       caption = "Colorado School of Public Health: \n Program for Injury Prevention, Education & Research")
 ```
 
 ## How have injuries rates changed over time?
 ### Line charts by sport nat' injury estimates
 **Shows DECREASE in injuries**
-```{r}
-national_time <- natl_injury_estimates %>% 
-  pivot_longer(cols = -X1, names_to = "Year", values_to = "Injury") %>% 
-  rename(Sport = X1) %>% 
-  filter(Sport != "Overall total")
-
-temp <- national_time$Year
-  
-temp <- temp %>% 
-  str_replace_all(pattern = "[[:punct:]]\\d{2}$", replacement = "") %>% 
-  as.integer()
-
-national_time <- national_time %>% 
-  select(-Year) %>% 
-  bind_cols(temp) %>% 
-  rename(Year = `...3`)
-```
-
-```{r}
-national_time %>% 
-  ggplot(aes(x = Year, y = Injury, color = Sport)) +
-  geom_line()
-```
-
-```{r}
-national_time %>% 
-  filter(Injury > 444281) %>% 
-  ggplot(aes(x = Year, y = Injury, color = Sport)) +
-  geom_line()
-```
+# ```{r}
+# national_time <- natl_injury_estimates %>% 
+#   pivot_longer(cols = -X1, names_to = "Year", values_to = "Injury") %>% 
+#   rename(Sport = X1) %>% 
+#   filter(Sport != "Overall total")
+# 
+# temp <- national_time$Year
+#   
+# temp <- temp %>% 
+#   str_replace_all(pattern = "[[:punct:]]\\d{2}$", replacement = "") %>% 
+#   as.integer()
+# 
+# national_time <- national_time %>% 
+#   select(-Year) %>% 
+#   bind_cols(temp) %>% 
+#   rename(Year = `...3`)
+# ```
+# 
+# ```{r}
+# national_time %>% 
+#   ggplot(aes(x = Year, y = Injury, color = Sport)) +
+#   geom_line()
+# ```
+# 
+# ```{r}
+# national_time %>% 
+#   filter(Injury > 444281) %>% 
+#   ggplot(aes(x = Year, y = Injury, color = Sport)) +
+#   geom_line()
+# ```
 
 
 ### Scatterplot diagnosis by year, color by type
@@ -170,70 +194,111 @@ diagnosis_by_year <- diagnosis_by_year %>%
 
 
 ```{r}
-diagnosis_by_year %>% 
+diagnosis_time <- diagnosis_by_year %>% 
   ggplot(aes(x = Year, y = Percent, color = Diagnosis)) +
-  facet_wrap(~ Diagnosis) +
+  facet_wrap(~ Diagnosis, scales = "free") +
   geom_point() +
-  geom_smooth()
+  geom_smooth() +
+  scale_color_manual(values = injury_colors) +
+  theme_minimal()
+```
+```{r}
+diagnosis_time +
+  labs(title = "Trends in Injury Diagnosis",
+       subtitle = "Years: 2005 - 2018",
+       caption = "Colorado School of Public Health: Program for Injury Prevention, Education & Research")
 ```
 
 
 # Participation
 ## Who participates in sports?
-# Boys participants map
-```{r}
-usa_map <- map_data("state")
+# ```{r}
+# usa_map <- map_data("state")
+# 
+# baseball_data <- data.frame(Count = all_boys_athletes_states$Baseball,
+#                             State = tolower(all_boys_athletes_states$State))
+# 
+# 
+# 
+# baseball_data %>% 
+#   ggplot(aes(fill = Count)) +
+#   geom_map(aes(map_id = State), map = usa_map) +
+#   expand_limits(x = usa_map$long, y = usa_map$lat)
+# ```
+# 
+# ```{r}
+# boys_basket_data <- data.frame(Count = all_boys_athletes_states$Basketball,
+#                             State = tolower(all_boys_athletes_states$State))
+# 
+# 
+# 
+# boys_basket_data %>% 
+#   ggplot(aes(fill = Count)) +
+#   geom_map(aes(map_id = State), map = usa_map) +
+#   expand_limits(x = usa_map$long, y = usa_map$lat)
+# ```
 
-baseball_data <- data.frame(Count = all_boys_athletes_states$Baseball,
-                            State = tolower(all_boys_athletes_states$State))
-
-
-
-baseball_data %>% 
-  ggplot(aes(fill = Count)) +
-  geom_map(aes(map_id = State), map = usa_map) +
-  expand_limits(x = usa_map$long, y = usa_map$lat)
-```
-
-```{r}
-boys_basket_data <- data.frame(Count = all_boys_athletes_states$Basketball,
-                            State = tolower(all_boys_athletes_states$State))
-
-
-
-boys_basket_data %>% 
-  ggplot(aes(fill = Count)) +
-  geom_map(aes(map_id = State), map = usa_map) +
-  expand_limits(x = usa_map$long, y = usa_map$lat)
-```
-
+### Boys Participants Map
 ```{r}
 boys_participation_long <- all_boys_athletes_states %>% 
   pivot_longer(cols = !State, names_to = "Sports", values_to = "Count")
   
 boys_participation_long$State <- tolower(boys_participation_long$State)
 
-boys_participation_long %>% 
+boys_participation_map <- boys_participation_long %>% 
   ggplot(aes(fill = Count)) +
   geom_map(aes(map_id = State), map = usa_map) +
   expand_limits(x = usa_map$long, y = usa_map$lat) +
   facet_wrap( ~ Sports)
 ```
-# Boys Programs Availability Map
+
+```{r}
+boys_participation_map +
+  theme_void() +
+  labs(title = "Counts of Participation in Boy's Sports by State",
+       subtitle = "Year: 2018",
+       caption = "High School Participation Survey Archive") +
+    theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  scale_fill_distiller(palette = "Greens", trans = "reverse")
+```
+
+
+### Boys Programs Availability Map
 ```{r}
 boys_programs_long <- all_boys_programs_states %>% 
   pivot_longer(cols = !State, names_to = "Sports", values_to = "Count")
   
 boys_programs_long$State <- tolower(boys_programs_long$State)
 
-boys_programs_long %>% 
+boys_programs_count <- boys_programs_long %>% 
   ggplot(aes(fill = Count)) +
   geom_map(aes(map_id = State), map = usa_map) +
   expand_limits(x = usa_map$long, y = usa_map$lat) +
   facet_wrap( ~ Sports)
 ```
 
-# Girls Participants Map
+```{r}
+boys_programs_count +
+  theme_void() +
+  labs(title = "Counts of Programs for Boy's Sports by State",
+       subtitle = "Year: 2018",
+       caption = "High School Participation Survey Archive") +
+    theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  scale_fill_distiller(palette = "Purples", trans = "reverse")
+```
+
+
+### Girls Participants Map
 ```{r}
 girls_participation_long <- girl_athletes_states %>% 
   select(-starts_with("X"), -Football) %>% 
@@ -241,14 +306,30 @@ girls_participation_long <- girl_athletes_states %>%
   
 girls_participation_long$State <- tolower(girls_participation_long$State)
 
-girls_participation_long %>% 
+girls_participation_map <- girls_participation_long %>% 
   ggplot(aes(fill = Count)) +
   geom_map(aes(map_id = State), map = usa_map) +
   expand_limits(x = usa_map$long, y = usa_map$lat) +
   facet_wrap( ~ Sports)
 ```
 
-# Girls Progams Map
+```{r}
+girls_participation_map +
+  theme_void() +
+  labs(title = "Counts of Participation in Girl's Sports by State",
+       subtitle = "Year: 2018",
+       caption = "High School Participation Survey Archive") +
+    theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  scale_fill_distiller(palette = "Greens", trans = "reverse")
+```
+
+
+### Girls Progams Map
 ```{r}
 girls_programs_long <- girl_programs_states %>% 
   select(-starts_with("X"), -Football) %>% 
@@ -256,11 +337,26 @@ girls_programs_long <- girl_programs_states %>%
   
 girls_programs_long$State <- tolower(girls_programs_long$State)
 
-girls_programs_long %>% 
+girls_programs_count <- girls_programs_long %>% 
   ggplot(aes(fill = Count)) +
   geom_map(aes(map_id = State), map = usa_map) +
   expand_limits(x = usa_map$long, y = usa_map$lat) +
   facet_wrap( ~ Sports)
+```
+
+```{r}
+girls_programs_count +
+  theme_void() +
+  labs(title = "Counts of Programs for Girls's Sports by State",
+       subtitle = "Year: 2018",
+       caption = "High School Participation Survey Archive") +
+    theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  scale_fill_distiller(palette = "Purples", trans = "reverse")
 ```
 
 
@@ -339,7 +435,8 @@ survey_levels <- c(
   "Somewhat disagree",
   "Strongly disagree",
   "Not at all sure"
-)
+) %>% 
+  as_factor()
 ```
 
 ```{r}
