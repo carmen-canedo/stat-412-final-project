@@ -1,7 +1,7 @@
 ---
 title: "Injury Analysis"
 author: "Carmen Canedo"
-date: "11 October 2020"
+date: "1 December 2020"
 output:
   pdf_document: default
   html_notebook: default
@@ -33,8 +33,7 @@ The data used are as follows:
 
 # Injuries
 ## How many kids are getting hurt?
-Bar Graph: Youth emergency visits for brain injuries
-```{r}
+```{r Youth TBI Carmen}
 # Getting rid of total counts
 youth_ed_tbi_visits <- youth_ed_tbi_visits %>% 
   filter(Sport != "Total contact count") %>%
@@ -57,13 +56,13 @@ youth_ed_tbi_visits %>%
 ```
 
 ## What demographics are most affected?
-Bar Graph: Number of concussions by gender
-```{r}
+```{r Concussions by Gender Carmen}
+# Pivoting longer
 num_concussions_2017 <- num_concussions_2017 %>% 
   pivot_longer(cols = c(male, female)) %>% 
   rename(gender = name)
 
-
+# Plotting Number of Concussions by Gender
 num_concussions_2017 %>% 
    ggplot(aes(x = concussions, y = value, fill = gender)) +
    geom_col(position = "dodge") +
@@ -80,21 +79,25 @@ Among High School Students",
 ```
 
 ## What sports have the most injuries?
-### Boxplots of injuries by sports
-```{r}
+### Injuries by sport
+```{r Combining Injury Totals Carmen}
+# Iterating over and combining injury datasets
 total_sport_injuries <- map_df(sports_injuries_type, combine_injury_totals)
 ```
 
-```{r}
+```{r Lengthening Total Sports Injuries Carmen}
+# Pivoting total sports injuries longer
 total_sport_injuries <- Sport %>% 
   bind_cols(total_sport_injuries) %>% 
   select(-Activity) %>% 
   pivot_longer(cols = -Sport, names_to = "Injury Type", values_to = "Count")
 ```
 
-```{r}
+```{r Boxplot of Injuries by Sport Carmen}
+# Vector of colors
 sports_colors <- c("#91b86e", "#956eb8", "#b86e90", "#6eb895", "#b8816e", "#b6b86e", "#706eb8")
 
+# Plotting injuries by sport
 total_injuries_boxplot <- total_sport_injuries %>% 
   ggplot(aes(x = Sport, y = Count, fill = Sport)) +
   geom_boxplot() +
@@ -103,7 +106,8 @@ total_injuries_boxplot <- total_sport_injuries %>%
   theme_minimal()
 ```
 
-```{r}
+```{r Boxplot of Injuries by Sport Continued Carmen}
+# Adding appropriate labels to histogram
 total_injuries_boxplot +
   labs(title = "Variations in Amount of Injuries by Sport",
        subtitle = "Year: 2018",
@@ -111,10 +115,12 @@ total_injuries_boxplot +
   theme(axis.text.x = element_text(size = 7)) 
 ```
 
-### Boxplot of injuries by type
-```{r}
+### Injuries by type
+```{r Boxplot of Injuries by Type Carmen}
+# Vector of colors
 injury_colors <- c("#91b86e", "#956eb8", "#b86e90", "#6eb895", "#b8816e")
 
+# Plotting boxplots of injury types
 injury_type_boxplot <- total_sport_injuries %>% 
   ggplot(aes(x = `Injury Type`, y = Count, fill = `Injury Type`)) +
   geom_boxplot() +
@@ -122,6 +128,7 @@ injury_type_boxplot <- total_sport_injuries %>%
   scale_y_continuous(breaks = seq(0, 175000, 25000)) +
   theme_minimal()
 
+# Adding labels to graph
 injury_type_boxplot +
   labs(title = "Variation in Most Common Injury Types",
        subtitle = "Year 2018",
@@ -129,62 +136,34 @@ injury_type_boxplot +
 ```
 
 ## How have injuries rates changed over time?
-### Line charts by sport nat' injury estimates
-**Shows DECREASE in injuries**
-# ```{r}
-# national_time <- natl_injury_estimates %>% 
-#   pivot_longer(cols = -X1, names_to = "Year", values_to = "Injury") %>% 
-#   rename(Sport = X1) %>% 
-#   filter(Sport != "Overall total")
-# 
-# temp <- national_time$Year
-#   
-# temp <- temp %>% 
-#   str_replace_all(pattern = "[[:punct:]]\\d{2}$", replacement = "") %>% 
-#   as.integer()
-# 
-# national_time <- national_time %>% 
-#   select(-Year) %>% 
-#   bind_cols(temp) %>% 
-#   rename(Year = `...3`)
-# ```
-# 
-# ```{r}
-# national_time %>% 
-#   ggplot(aes(x = Year, y = Injury, color = Sport)) +
-#   geom_line()
-# ```
-# 
-# ```{r}
-# national_time %>% 
-#   filter(Injury > 444281) %>% 
-#   ggplot(aes(x = Year, y = Injury, color = Sport)) +
-#   geom_line()
-# ```
-
-
-### Scatterplot diagnosis by year, color by type
-```{r}
+### Diagnosis by year, color by type
+```{r Lengthening Diagnosis Table Carmen}
+# Pivoting diagnosis dataset
 diagnosis_by_year <- diagnosis_by_year %>% 
   rename(Diagnosis = X1) %>% 
   filter(Diagnosis != "Total") %>% 
   pivot_longer(cols = !Diagnosis, names_to = "Year", values_to = "Percent")
 ```
 
-```{r}
+```{r Formatting Diagnosis Carmen}
+# Temporary variable holding all year values
 temp_year <- diagnosis_by_year$Year
 
+# Temporary variable holding all percent values
 temp_perc <- diagnosis_by_year$Percent
-  
+
+# Using regex to clean observations
 temp_year <- temp_year %>% 
   str_replace_all(pattern = ",", replacement = "") %>% 
   str_replace_all(pattern = "[[:punct:]]\\d{2}", replacement = "") %>% 
   as.integer()
 
+# Using regex to get rid of percent sign
 temp_perc <- temp_perc %>% 
   str_replace_all(pattern = "%", replacement = "") %>% 
   as.numeric()
 
+# Joining new columns and renaming variables for clarity
 diagnosis_by_year <- diagnosis_by_year %>% 
   select(-Year, -Percent) %>% 
   bind_cols(temp_year, temp_perc) %>% 
@@ -192,8 +171,8 @@ diagnosis_by_year <- diagnosis_by_year %>%
   rename(Percent = `...3`)
 ```
 
-
-```{r}
+```{r Scatterplot for Diagnosis by Sport Carmen}
+# Creating scatter plot of diagnoses over time by type
 diagnosis_time <- diagnosis_by_year %>% 
   ggplot(aes(x = Year, y = Percent, color = Diagnosis)) +
   facet_wrap(~ Diagnosis, scales = "free") +
@@ -202,7 +181,9 @@ diagnosis_time <- diagnosis_by_year %>%
   scale_color_manual(values = injury_colors) +
   theme_minimal()
 ```
-```{r}
+
+```{r Scatterplot Formatting Carmen}
+# Adding appropriate labels to diagram
 diagnosis_time +
   labs(title = "Trends in Injury Diagnosis",
        subtitle = "Years: 2005 - 2018",
@@ -212,39 +193,21 @@ diagnosis_time +
 
 # Participation
 ## Who participates in sports?
-# ```{r}
-# usa_map <- map_data("state")
-# 
-# baseball_data <- data.frame(Count = all_boys_athletes_states$Baseball,
-#                             State = tolower(all_boys_athletes_states$State))
-# 
-# 
-# 
-# baseball_data %>% 
-#   ggplot(aes(fill = Count)) +
-#   geom_map(aes(map_id = State), map = usa_map) +
-#   expand_limits(x = usa_map$long, y = usa_map$lat)
-# ```
-# 
-# ```{r}
-# boys_basket_data <- data.frame(Count = all_boys_athletes_states$Basketball,
-#                             State = tolower(all_boys_athletes_states$State))
-# 
-# 
-# 
-# boys_basket_data %>% 
-#   ggplot(aes(fill = Count)) +
-#   geom_map(aes(map_id = State), map = usa_map) +
-#   expand_limits(x = usa_map$long, y = usa_map$lat)
-# ```
+```{r Map Data Carmen}
+# Loading latitude and longitude data
+usa_map <- map_data("state")
+```
 
 ### Boys Participants Map
-```{r}
+```{r Boy Participation Carmen}
+# Lengthening boys participation data
 boys_participation_long <- all_boys_athletes_states %>% 
   pivot_longer(cols = !State, names_to = "Sports", values_to = "Count")
-  
+
+# Making state names lowecase to match `usa_map`
 boys_participation_long$State <- tolower(boys_participation_long$State)
 
+# Plotting choropleth map
 boys_participation_map <- boys_participation_long %>% 
   ggplot(aes(fill = Count)) +
   geom_map(aes(map_id = State), map = usa_map) +
@@ -252,7 +215,8 @@ boys_participation_map <- boys_participation_long %>%
   facet_wrap( ~ Sports)
 ```
 
-```{r}
+```{r Boy Participation Map Carmen}
+# Adding labels to map
 boys_participation_map +
   theme_void() +
   labs(title = "Counts of Participation in Boy's Sports by State",
@@ -269,12 +233,15 @@ boys_participation_map +
 
 
 ### Boys Programs Availability Map
-```{r}
+```{r Boys Programs Carmen}
+# Lengthening program data
 boys_programs_long <- all_boys_programs_states %>% 
   pivot_longer(cols = !State, names_to = "Sports", values_to = "Count")
   
+# Making state names lowercase
 boys_programs_long$State <- tolower(boys_programs_long$State)
 
+# Plotting choropleth map
 boys_programs_count <- boys_programs_long %>% 
   ggplot(aes(fill = Count)) +
   geom_map(aes(map_id = State), map = usa_map) +
@@ -282,7 +249,8 @@ boys_programs_count <- boys_programs_long %>%
   facet_wrap( ~ Sports)
 ```
 
-```{r}
+```{r Boys Programs Map Carmen}
+# Adding lables
 boys_programs_count +
   theme_void() +
   labs(title = "Counts of Programs for Boy's Sports by State",
@@ -299,13 +267,16 @@ boys_programs_count +
 
 
 ### Girls Participants Map
-```{r}
+```{r Gir Participation Carmen}
+# Lengthening girls participation data
 girls_participation_long <- girl_athletes_states %>% 
   select(-starts_with("X"), -Football) %>% 
   pivot_longer(cols = !State, names_to = "Sports", values_to = "Count")
   
+# Making state names lowercase
 girls_participation_long$State <- tolower(girls_participation_long$State)
 
+# Plotting choropleth map
 girls_participation_map <- girls_participation_long %>% 
   ggplot(aes(fill = Count)) +
   geom_map(aes(map_id = State), map = usa_map) +
@@ -313,7 +284,8 @@ girls_participation_map <- girls_participation_long %>%
   facet_wrap( ~ Sports)
 ```
 
-```{r}
+```{r Girl Participation Map}
+# Adding labels
 girls_participation_map +
   theme_void() +
   labs(title = "Counts of Participation in Girl's Sports by State",
@@ -330,13 +302,16 @@ girls_participation_map +
 
 
 ### Girls Progams Map
-```{r}
+```{r Girls Programs Carmen}
+# Lengthening data
 girls_programs_long <- girl_programs_states %>% 
   select(-starts_with("X"), -Football) %>% 
   pivot_longer(cols = !State, names_to = "Sports", values_to = "Count")
-  
+
+# Making state names lowercase
 girls_programs_long$State <- tolower(girls_programs_long$State)
 
+# Plotting chropleth map
 girls_programs_count <- girls_programs_long %>% 
   ggplot(aes(fill = Count)) +
   geom_map(aes(map_id = State), map = usa_map) +
@@ -344,7 +319,8 @@ girls_programs_count <- girls_programs_long %>%
   facet_wrap( ~ Sports)
 ```
 
-```{r}
+```{r Girl Participation Carmen}
+# Adding labels
 girls_programs_count +
   theme_void() +
   labs(title = "Counts of Programs for Girls's Sports by State",
@@ -359,76 +335,17 @@ girls_programs_count +
   scale_fill_distiller(palette = "Purples", trans = "reverse")
 ```
 
-
-## How many people participate in sports?
-**SHOWS INCREASE**
-Line graph of sports
-# ```{r}
-# national_time <- natl_injury_estimates %>% 
-#   pivot_longer(cols = -X1, names_to = "Year", values_to = "Injury") %>% 
-#   rename(Sport = X1) %>% 
-#   filter(Sport == "Overall total")
-# 
-# temp <- national_time$Year
-#   
-# temp <- temp %>% 
-#   str_replace_all(pattern = "[[:punct:]]\\d{2}$", replacement = "") %>% 
-#   as.integer()
-# 
-# national_time <- national_time %>% 
-#   select(-Year) %>% 
-#   bind_cols(temp) %>% 
-#   rename(Year = `...3`)
-# ```
-# 
-# ```{r}
-# national_time %>% 
-#   ggplot(aes(x = Year, y = Injury, color = Sport)) +
-#   geom_line()
-# ```
-# 
-# ```{r}
-# national_time %>% 
-#   filter(Injury > 444281) %>% 
-#   ggplot(aes(x = Year, y = Injury, color = Sport)) +
-#   geom_line()
-# ```
-# 
-# ```{r}
-# temp <- participation_count_1971_2019$Year
-#   
-# temp <- temp %>% 
-#   str_replace_all(pattern = "[[:punct:]]\\d{2}$", replacement = "") %>% 
-#   as.integer()
-# 
-# participation_recent <- participation_count_1971_2019 %>% 
-#   select(-Year) %>% 
-#   bind_cols(temp) %>% 
-#   rename(Year = `...4`)
-# 
-# participation_recent <- participation_recent %>% 
-#   filter(Year > 2004)
-# 
-# participation_recent
-# ```
-# 
-# ```{r}
-# participation_recent %>% 
-#   ggplot(aes(x = Year, y = `Girls Participants`)) +
-#   geom_line()
-# ```
-
-
 # Conclusion
-## Injuries and participation over time
-## Stacked Bar Graph: Public opinion
-```{r}
+## Public opinion
+```{r Factor Levels Carmen}
+# Vector of statements from survey
 text_statements <- c("Players who suffer a head injury should be required to take a minimum set amount of time off from playing to recover.",
                      "Helmets should be changed to better protect against concussions.",
                      "The risks of playing football are widely known and players participate at their own risk.",
                      "There should be a standardized test used to determine if and when injured players at all levels may return to the field.",
                      "Aggressive tackles which are more prone to leading to head injuries should be restricted in youth football.")
 
+# Vector of survey levels
 survey_levels <- c(
   "Strongly agree",
   "Somewhat agree",
@@ -439,7 +356,7 @@ survey_levels <- c(
   as_factor()
 ```
 
-```{r}
+```{r Lengthening Data Carmen}
 # Getting rid of Statement column to convert numbers to percents
 survey_interim <- survey_tbi_effects %>% 
   select(-Statement)
@@ -481,7 +398,8 @@ long_percentage <- data_percentage %>%
 
 ```
 
-```{r}
+```{r Stacked Bar Graph Carmen}
+# Vector of colors and lavels
 set_colors <- c("#91b86e", "#956eb8", "#b86e90", "#6eb895", "#b8816e", "#b6b86e")
 xlabels <- c("1", "2", "3", "4", "5")
 
