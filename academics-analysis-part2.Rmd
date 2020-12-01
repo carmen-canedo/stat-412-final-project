@@ -1,0 +1,105 @@
+---
+title: "Academics Analysis Part 2"
+author: "Joseph Bernardi"
+date: "11/30/2020"
+output:
+  word_document: default
+  html_document: default
+---
+
+  An essential part of our hypothesis is that an increased amount of focus on academics will lower the participation in sports, as students will have less time to devote to sports.
+
+  Initially, I tested AP enrollment against the participation in high school sports, but found no significant correlation. I concluded that this may be due to other variables such as the differing availability of AP programs at school. Therefore, I began to analyze the relationship between SAT enrollment (per capita) and average score, as well as boys and girls sports participation (per capita).
+
+
+### SAT Enrollment
+
+```{r echo=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+library(ggthemes)
+
+participationdata <- read.csv("participation_data.csv")
+
+# Condense data to get total sports participation for each state, for the 2018/2019 school year
+participationdata <- participationdata %>%
+  subset(year = "2018/2019") %>%
+  select(state, boys_participation, girls_participation) %>%
+  group_by(state) %>%
+  summarise(state.boys_partic = sum(boys_participation), state.girls_partic = sum(girls_participation)) %>%
+  na.omit()
+
+statepopdata <- read.csv("https://raw.githubusercontent.com/JoshData/historical-state-population-csv/primary/historical_state_population_by_year.csv")
+
+# Adjust state participation by state population
+statepopdata <- statepopdata %>%
+  rename("state" = "AK", "Population" = X135000) %>%
+  subset(X1950 == 2019) %>%
+  select(state, Population)
+
+percap.participation <- participationdata %>%
+  inner_join(statepopdata, by = "state") %>%
+  group_by(state) %>%
+  summarise(boys.participation.percapita = state.boys_partic / Population, girls.participation.percapita = state.girls_partic / Population, total.participation.percapita = (state.boys_partic + state.girls_partic) / Population, Population) %>%
+  pivot_longer(cols = c(boys.participation.percapita, girls.participation.percapita), names_to = "Gender", values_to = "Per Capita Participation")
+
+# Plot for participation by state and gender
+ggplot(data=percap.participation, aes(x=state, y=`Per Capita Participation`, fill=Gender)) +
+geom_bar(stat="identity", width = 0.8, position=position_dodge(width = 0.8)) + theme(axis.text=element_text(size=7, angle=45), legend.position="bottom") + scale_fill_discrete(name = "Gender", labels = c("Boys Participation", "Girls Participation")) + ggtitle("Sports Participation(Per Capita) by State and Gender in 2019")
+
+ggplot(data=percap.participation, aes(x=state, y=total.participation.percapita)) + theme_calc() + geom_bar(stat="identity", width = 0.6, fill = "dark green") + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation (Per Capita) by State in 2019")
+
+
+```
+  
+  
+Here we can observe that different states have varying levels of participation when adjusting for population size. In general, boys tend to participate in sports more than girls. Iowa and Nebraska are among the highest for per capita participation. We can also observe similar trends when comparing total participation between states.
+
+
+```{r echo=FALSE}
+
+SAT_data <- read.csv("SAT_data.csv")
+
+Sports.vs.SAT <- percap.participation %>%
+  inner_join(SAT_data, by = "state") %>%
+  select(state, total.participation.percapita, tooktest, avg_score, Population) %>%
+  unique() %>%
+  group_by(state) %>%
+  summarise(tooktest.percapita = tooktest / Population, total.participation.percapita, avg_score, tooktest, Population)
+
+Sports.vs.SAT %>%
+  ggplot(aes(x = reorder(state, total.participation.percapita), y = tooktest.percapita)) + theme_calc() + geom_bar(stat="identity", width = 0.6, fill = "dark red") + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation VS SAT Enrollment") + xlab("States from Least to Greatest in Sports Participation Per Capita")
+
+  
+Sports.vs.SAT %>%
+  ggplot(aes(x = total.participation.percapita, y = tooktest.percapita, group = 1)) + theme_calc() + geom_line(stat="identity", width = 0.6, color = "dark red") + geom_point() + geom_text(aes(label=state), size = 3, hjust=-0.3, vjust=0) + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation VS SAT Enrollment") + xlab("Sports Participation Per Capita")
+
+
+```
+
+
+  First, we can examine the relationship between sports participation per capita and SAT enrollment per capita. We can observe this relationship in a couple ways, the first of which is ordering the states from least to greatest in terms of sports participation, and plotting the enrollment per capita on a bar chart. Secondly, we may use a line plot to compare the two values, while portraying the states as point labels.
+  
+  After examining both of these visualizations, it is apparent that there is no visible correlation between sports participation and SAT enrollment, as the data points are flat, and do not entail a positive or negative correlation.
+  
+```{r echo=FALSE}
+
+Sports.vs.SAT %>%
+  group_by(state) %>%
+  summarise(sport.score_ratio = total.participation.percapita / avg_score, Population, total.participation.percapita, avg_score) %>%
+  ggplot(aes(x = reorder(state, total.participation.percapita), y = avg_score)) + theme_calc() + geom_bar(stat="identity", width = 0.6, fill = "dark blue") + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation VS Average SAT Score") + xlab("States from Least to Greatest in Sports Participation Per Capita")
+
+Sports.vs.SAT %>%
+  group_by(state) %>%
+  summarise(sport.score_ratio = total.participation.percapita / avg_score, Population, total.participation.percapita, avg_score) %>%
+  ggplot(aes(x = total.participation.percapita, y = avg_score, group = 1)) + geom_point() + geom_text(aes(label=state), size = 3, hjust=-0.3, vjust=0) + theme_calc() + geom_line(stat="identity", width = 0.6, color = "dark blue") + theme(axis.text=element_text(size=7, angle=45)) + ggtitle("Sports Participation VS Average SAT Score") + xlab("Sports Participation Per Capita")
+
+
+```
+
+  Similar visualization techniques can be used to examine the relationship between sports participation per capita and the average SAT score for each state. A similar conclusion can be inferred from these visualizations, in that there seems to be no visible correlation between the two variables. Neither plot infers a positive or negative correlation, as there is no clear trend in the data points.
+  
+  In summary, the data distinctly portrays that there is no correlation between SAT enrollment/scores and participation in sports.
+  
+
